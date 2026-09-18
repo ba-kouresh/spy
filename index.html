@@ -1,0 +1,2057 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#050510">
+<title>دستیار جاسوس</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  :root {
+    --bg:#050510;
+    --bg2:#0d0d22;
+    --card:rgba(25,25,55,.7);
+    --accent:#ff2e63;
+    --accent2:#7b2cff;
+    --accent3:#00e5ff;
+    --gold:#ffd700;
+    --green:#00e676;
+    --orange:#ff6b35;
+    --text:#f0f0f5;
+    --muted:#8a8aa0;
+  }
+  html,body { height:100%; overflow-x:hidden; }
+  body {
+    font-family:'Vazirmatn', sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    padding:16px;
+    padding-bottom:40px;
+    position:relative;
+    overflow-x:hidden;
+  }
+
+  body::before {
+    content:'';
+    position:fixed;
+    inset:0;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(255,46,99,.15) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(123,44,255,.15) 0%, transparent 40%),
+      radial-gradient(circle at 50% 50%, rgba(0,229,255,.08) 0%, transparent 50%);
+    animation:bgShift 15s ease-in-out infinite;
+    z-index:-2;
+  }
+  @keyframes bgShift {
+    0%,100% { transform:scale(1) rotate(0deg); }
+    50% { transform:scale(1.2) rotate(180deg); }
+  }
+
+  .particles {
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    pointer-events:none;
+    overflow:hidden;
+  }
+  .particle {
+    position:absolute;
+    width:3px; height:3px;
+    background:var(--accent3);
+    border-radius:50%;
+    box-shadow:0 0 6px var(--accent3);
+    animation:float linear infinite;
+    opacity:.6;
+  }
+  @keyframes float {
+    0% { transform:translateY(100vh) translateX(0); opacity:0; }
+    10% { opacity:.6; }
+    90% { opacity:.6; }
+    100% { transform:translateY(-10vh) translateX(50px); opacity:0; }
+  }
+
+  .app { max-width:480px; margin:0 auto; position:relative; z-index:1; }
+  .screen { display:none; animation:slideIn .5s cubic-bezier(.2,.9,.3,1.2); }
+  .screen.active { display:block; }
+  @keyframes slideIn { from{opacity:0; transform:translateY(20px) scale(.97);} to{opacity:1; transform:none;} }
+  @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.05);} }
+  @keyframes glow {
+    0%,100%{box-shadow:0 0 20px var(--accent), 0 0 40px rgba(255,46,99,.3);}
+    50%{box-shadow:0 0 40px var(--accent), 0 0 80px var(--accent2), 0 0 100px rgba(123,44,255,.4);}
+  }
+  @keyframes neonPulse {
+    0%,100%{text-shadow:0 0 10px currentColor, 0 0 20px currentColor;}
+    50%{text-shadow:0 0 20px currentColor, 0 0 40px currentColor, 0 0 60px currentColor;}
+  }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  @keyframes shimmer {
+    0% { background-position:-200% 0; }
+    100% { background-position:200% 0; }
+  }
+  @keyframes countdown {
+    0% { transform:scale(1); opacity:1; }
+    50% { transform:scale(1.3); opacity:.8; }
+    100% { transform:scale(1); opacity:1; }
+  }
+
+  h1.logo {
+    font-size:38px;
+    font-weight:900;
+    text-align:center;
+    margin:30px 0 8px;
+    background:linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, var(--accent3) 100%);
+    background-size:200% 200%;
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    letter-spacing:-1px;
+    animation:shimmer 4s linear infinite;
+  }
+  .subtitle { text-align:center; color:var(--muted); margin-bottom:30px; font-size:14px; letter-spacing:1px; }
+  .spy-icon {
+    width:130px; height:130px;
+    margin:20px auto;
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius:35px;
+    animation:glow 3s ease-in-out infinite;
+    font-size:65px;
+    position:relative;
+    border:2px solid rgba(255,255,255,.1);
+  }
+  .spy-icon::after {
+    content:'';
+    position:absolute;
+    inset:-4px;
+    border-radius:38px;
+    background:linear-gradient(135deg, var(--accent), var(--accent2), var(--accent3));
+    z-index:-1;
+    filter:blur(15px);
+    opacity:.6;
+    animation:spin 8s linear infinite;
+  }
+
+  .btn {
+    display:flex; align-items:center; gap:12px;
+    width:100%;
+    padding:16px 20px;
+    margin:10px 0;
+    background:var(--card);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,.08);
+    color:var(--text);
+    border-radius:18px;
+    font-family:inherit;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:all .25s;
+    text-align:right;
+    position:relative;
+    overflow:hidden;
+  }
+  .btn::before {
+    content:'';
+    position:absolute;
+    inset:0;
+    background:linear-gradient(135deg, transparent, rgba(255,255,255,.05), transparent);
+    transform:translateX(-100%);
+    transition:transform .5s;
+  }
+  .btn:hover::before { transform:translateX(100%); }
+  .btn:active { transform:scale(.97); }
+  .btn .ico { font-size:22px; }
+  .btn.primary {
+    background:linear-gradient(135deg, var(--accent), var(--accent2));
+    border:none;
+    justify-content:center;
+    font-size:18px;
+    padding:18px;
+    box-shadow:0 8px 24px rgba(255,46,99,.4), 0 0 40px rgba(123,44,255,.2);
+  }
+  .btn.ghost { background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.15); }
+  .btn.danger { background:linear-gradient(135deg, #c62828, #8e0000); }
+  .btn.small { padding:10px 14px; font-size:14px; margin:4px; display:inline-flex; width:auto; }
+
+  .card {
+    background:var(--card);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border-radius:22px;
+    padding:20px;
+    margin:14px 0;
+    border:1px solid rgba(255,255,255,.06);
+    box-shadow:0 8px 32px rgba(0,0,0,.3);
+  }
+  .card h3 { margin-bottom:12px; font-size:17px; color:var(--gold); }
+
+  .field { margin:14px 0; }
+  .field label { display:block; margin-bottom:8px; font-size:14px; color:var(--muted); }
+  .stepper {
+    display:flex; align-items:center;
+    background:var(--bg2);
+    border-radius:14px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,.05);
+  }
+  .stepper button {
+    width:48px; height:48px;
+    background:transparent;
+    border:none;
+    color:var(--text);
+    font-size:22px;
+    cursor:pointer;
+    font-family:inherit;
+    transition:all .15s;
+  }
+  .stepper button:active { background:var(--accent); transform:scale(.95); }
+  .stepper .val {
+    flex:1; text-align:center;
+    font-size:20px; font-weight:800;
+    color:var(--gold);
+    font-variant-numeric:tabular-nums;
+  }
+  input[type=text], input[type=number], textarea, select {
+    width:100%;
+    padding:12px 14px;
+    background:var(--bg2);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;
+    color:var(--text);
+    font-family:inherit;
+    font-size:15px;
+    outline:none;
+    transition:all .2s;
+  }
+  input:focus, textarea:focus, select:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(255,46,99,.15); }
+
+  .topbar {
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:16px;
+  }
+  .back {
+    background:var(--card);
+    backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,.08);
+    width:44px; height:44px;
+    border-radius:14px;
+    color:var(--text);
+    font-size:20px;
+    cursor:pointer;
+    transition:all .2s;
+  }
+  .back:active { transform:scale(.9); background:var(--accent); }
+  .topbar h2 { font-size:18px; }
+
+  .game-timer {
+    position:sticky;
+    top:0;
+    background:linear-gradient(135deg, rgba(25,25,55,.95), rgba(13,13,34,.95));
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    border:1px solid rgba(255,215,0,.2);
+    border-radius:16px;
+    padding:12px 16px;
+    margin-bottom:16px;
+    display:flex; align-items:center; justify-content:space-between;
+    box-shadow:0 4px 20px rgba(0,0,0,.4);
+    z-index:10;
+  }
+  .game-timer .label { font-size:13px; color:var(--muted); }
+  .game-timer .time {
+    font-size:24px;
+    font-weight:900;
+    color:var(--gold);
+    font-variant-numeric:tabular-nums;
+    text-shadow:0 0 10px rgba(255,215,0,.5);
+  }
+  .game-timer.warning .time { color:var(--orange); animation:neonPulse 1s infinite; }
+  .game-timer.danger .time { color:var(--accent); animation:neonPulse .5s infinite; }
+
+  .reveal-wrap {
+    min-height:75vh;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    text-align:center;
+    padding:20px 0;
+  }
+  .player-num {
+    font-size:15px; color:var(--muted);
+    margin-bottom:10px;
+    letter-spacing:1px;
+  }
+  .word-card {
+    width:100%;
+    min-height:280px;
+    background:linear-gradient(135deg, #1a1a35, #2a1a45);
+    border-radius:28px;
+    padding:30px 20px;
+    margin:20px 0;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    border:2px solid rgba(255,255,255,.08);
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 20px 60px rgba(0,0,0,.5);
+  }
+  .word-card::before {
+    content:'';
+    position:absolute;
+    inset:0;
+    background:linear-gradient(135deg, transparent 30%, rgba(255,255,255,.05) 50%, transparent 70%);
+    background-size:200% 200%;
+    animation:shimmer 3s linear infinite;
+  }
+  .word-card.hidden-word {
+    background:repeating-linear-gradient(45deg, #1a1a35, #1a1a35 10px, #0f0f25 10px, #0f0f25 20px);
+  }
+  .word-text {
+    font-size:42px;
+    font-weight:900;
+    background:linear-gradient(135deg, var(--gold), #ffaa00, var(--gold));
+    background-size:200% 200%;
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    margin:10px 0;
+    animation:shimmer 3s linear infinite;
+    position:relative;
+    z-index:1;
+  }
+  .word-role {
+    font-size:14px; color:var(--muted);
+    margin-bottom:8px;
+    position:relative;
+    z-index:1;
+  }
+  .word-hint {
+    font-size:15px;
+    color:#cfcfe0;
+    margin-top:12px;
+    line-height:1.7;
+    max-width:320px;
+    position:relative;
+    z-index:1;
+  }
+  .spy-label {
+    font-size:48px;
+    font-weight:900;
+    color:var(--accent);
+    animation:neonPulse 1.5s infinite;
+    position:relative;
+    z-index:1;
+  }
+  .timer-ring {
+    width:130px; height:130px;
+    margin:20px auto;
+    position:relative;
+  }
+  .timer-ring svg { transform:rotate(-90deg); }
+  .timer-ring circle { fill:none; stroke-width:6; }
+  .timer-ring .bg { stroke:rgba(255,255,255,.1); }
+  .timer-ring .fg {
+    stroke:url(#timerGrad);
+    stroke-linecap:round;
+    transition:stroke-dashoffset 1s linear;
+    filter:drop-shadow(0 0 6px var(--accent));
+  }
+  .timer-text {
+    position:absolute;
+    inset:0;
+    display:flex; align-items:center; justify-content:center;
+    font-size:36px; font-weight:900;
+    color:var(--gold);
+    font-variant-numeric:tabular-nums;
+  }
+
+  .big-btn {
+    width:100%;
+    padding:20px;
+    border:none;
+    border-radius:20px;
+    font-family:inherit;
+    font-size:18px;
+    font-weight:700;
+    cursor:pointer;
+    margin:8px 0;
+    transition:all .2s;
+    position:relative;
+    overflow:hidden;
+  }
+  .big-btn:active { transform:scale(.96); }
+  .big-btn.show {
+    background:var(--card);
+    backdrop-filter:blur(10px);
+    color:var(--text);
+    border:1px solid rgba(255,255,255,.15);
+  }
+  .big-btn.got {
+    background:linear-gradient(135deg, var(--green), #00a152);
+    color:#000;
+    box-shadow:0 8px 24px rgba(0,230,118,.3);
+  }
+  .big-btn.next {
+    background:linear-gradient(135deg, var(--accent), var(--accent2));
+    color:#fff;
+    box-shadow:0 8px 24px rgba(255,46,99,.4);
+  }
+  .big-btn.hint {
+    background:transparent;
+    color:var(--gold);
+    border:1px dashed var(--gold);
+    margin-top:10px;
+  }
+  .big-btn.hint.active {
+    background:rgba(255,215,0,.1);
+    border-style:solid;
+  }
+
+  .cat-tabs { display:flex; gap:8px; overflow-x:auto; padding-bottom:8px; margin-bottom:12px; }
+  .cat-tabs::-webkit-scrollbar { display:none; }
+  .cat-tab {
+    padding:8px 14px;
+    background:var(--card);
+    backdrop-filter:blur(10px);
+    border-radius:20px;
+    font-size:13px;
+    white-space:nowrap;
+    cursor:pointer;
+    border:1px solid rgba(255,255,255,.06);
+    transition:all .2s;
+  }
+  .cat-tab.active {
+    background:linear-gradient(135deg, var(--accent), var(--accent2));
+    border-color:transparent;
+    box-shadow:0 4px 16px rgba(255,46,99,.3);
+  }
+  .word-chips { display:flex; flex-wrap:wrap; gap:6px; }
+  .chip {
+    padding:6px 12px;
+    background:var(--bg2);
+    border-radius:20px;
+    font-size:13px;
+    display:inline-flex; align-items:center; gap:6px;
+    border:1px solid rgba(255,255,255,.05);
+  }
+  .chip .x { color:var(--accent); cursor:pointer; font-weight:700; }
+  .chip.custom { border:1px solid var(--gold); }
+  .chip.used { opacity:.4; text-decoration:line-through; }
+  .chip.hard { border-color:var(--accent); }
+  .chip.hard::before { content:'🔥'; font-size:10px; }
+
+  .about-box {
+    background:linear-gradient(135deg, rgba(255,46,99,.08), rgba(123,44,255,.08));
+    backdrop-filter:blur(10px);
+    border:1px solid rgba(255,215,0,.2);
+    border-radius:22px;
+    padding:24px;
+    margin:16px 0;
+    text-align:center;
+  }
+  .about-box h2 {
+    background:linear-gradient(135deg, var(--gold), #ffaa00);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    margin-bottom:14px;
+  }
+  .about-box p { line-height:1.9; color:#cfcfe0; font-size:14px; margin-bottom:10px; text-align:right; }
+  .creator {
+    margin-top:20px;
+    padding-top:18px;
+    border-top:1px solid rgba(255,255,255,.1);
+    font-size:15px;
+  }
+  .creator .name {
+    font-size:26px;
+    font-weight:900;
+    background:linear-gradient(135deg, var(--accent), var(--gold), var(--accent3));
+    background-size:200% 200%;
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    margin-top:4px;
+    animation:shimmer 4s linear infinite;
+  }
+
+  .toast {
+    position:fixed;
+    bottom:30px; left:50%;
+    transform:translateX(-50%) translateY(100px);
+    background:var(--card);
+    backdrop-filter:blur(20px);
+    padding:12px 20px;
+    border-radius:30px;
+    border:1px solid var(--accent);
+    font-size:14px;
+    transition:transform .3s;
+    z-index:100;
+    box-shadow:0 8px 24px rgba(0,0,0,.5);
+  }
+  .toast.show { transform:translateX(-50%) translateY(0); }
+
+  .seg-ctrl {
+    display:flex;
+    background:var(--bg2);
+    border-radius:14px;
+    padding:4px;
+    border:1px solid rgba(255,255,255,.05);
+  }
+  .seg-ctrl button {
+    flex:1;
+    padding:10px;
+    background:transparent;
+    border:none;
+    color:var(--muted);
+    font-family:inherit;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    border-radius:10px;
+    transition:all .2s;
+  }
+  .seg-ctrl button.active {
+    background:linear-gradient(135deg, var(--accent), var(--accent2));
+    color:#fff;
+    box-shadow:0 4px 12px rgba(255,46,99,.3);
+  }
+
+  .stats {
+    display:flex;
+    gap:8px;
+    margin:12px 0;
+  }
+  .stat {
+    flex:1;
+    background:var(--bg2);
+    border-radius:14px;
+    padding:10px;
+    text-align:center;
+    border:1px solid rgba(255,255,255,.05);
+  }
+  .stat .num { font-size:22px; font-weight:900; color:var(--gold); }
+  .stat .lbl { font-size:11px; color:var(--muted); margin-top:2px; }
+
+  /* Discussion screen */
+  .discussion-wrap {
+    min-height:80vh;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    text-align:center;
+    padding:20px 0;
+  }
+  .big-timer {
+    font-size:80px;
+    font-weight:900;
+    background:linear-gradient(135deg, var(--gold), #ffaa00);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    margin:20px 0;
+    font-variant-numeric:tabular-nums;
+    text-shadow:0 0 30px rgba(255,215,0,.5);
+  }
+  .big-timer.warning {
+    background:linear-gradient(135deg, var(--orange), #ff4500);
+    -webkit-background-clip:text;
+    animation:neonPulse 1s infinite;
+  }
+  .big-timer.danger {
+    background:linear-gradient(135deg, var(--accent), #ff0000);
+    -webkit-background-clip:text;
+    animation:neonPulse .5s infinite;
+  }
+
+  /* Reveal screen */
+  .reveal-card {
+    background:var(--card);
+    backdrop-filter:blur(10px);
+    border-radius:20px;
+    padding:20px;
+    margin:12px 0;
+    border:1px solid rgba(255,255,255,.08);
+    text-align:right;
+  }
+  .reveal-card h3 {
+    margin-bottom:12px;
+    font-size:16px;
+  }
+  .reveal-card .word {
+    font-size:28px;
+    font-weight:900;
+    margin:8px 0;
+  }
+  .reveal-card .word.civ { color:var(--gold); }
+  .reveal-card .word.axe { color:var(--orange); }
+  .player-list {
+    margin-top:12px;
+  }
+  .player-item {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px;
+    background:var(--bg2);
+    border-radius:12px;
+    margin:6px 0;
+    border:1px solid rgba(255,255,255,.05);
+  }
+  .player-item .name { font-weight:600; }
+  .player-item .role {
+    padding:4px 10px;
+    border-radius:10px;
+    font-size:12px;
+    font-weight:700;
+  }
+  .role.civ { background:rgba(255,215,0,.2); color:var(--gold); }
+  .role.spy { background:rgba(255,46,99,.2); color:var(--accent); }
+  .role.axe { background:rgba(255,107,53,.2); color:var(--orange); }
+</style>
+</head>
+<body>
+
+<div class="particles" id="particles"></div>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="timerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff2e63"/>
+      <stop offset="50%" stop-color="#7b2cff"/>
+      <stop offset="100%" stop-color="#00e5ff"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<div class="app">
+
+  <!-- صفحه اصلی -->
+  <div id="screen-home" class="screen active">
+    <div class="spy-icon">🕵️</div>
+    <h1 class="logo">دستیار جاسوس</h1>
+    <p class="subtitle">بازی گروهی پیدا کردن جاسوس</p>
+
+    <button class="btn primary" onclick="go('setup')">
+      <span class="ico">▶️</span> شروع بازی جدید
+    </button>
+    <button class="btn" onclick="go('words')">
+      <span class="ico">📚</span> مدیریت کلمات
+    </button>
+    <button class="btn" onclick="go('settings')">
+      <span class="ico">⚙️</span> تنظیمات
+    </button>
+    <button class="btn" onclick="go('about')">
+      <span class="ico">ℹ️</span> درباره‌ی بازی
+    </button>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="num" id="stat-total">0</div>
+        <div class="lbl">کل کلمات</div>
+      </div>
+      <div class="stat">
+        <div class="num" id="stat-used">0</div>
+        <div class="lbl">استفاده شده</div>
+      </div>
+      <div class="stat">
+        <div class="num" id="stat-cats">0</div>
+        <div class="lbl">دسته‌بندی</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- تنظیمات بازی -->
+  <div id="screen-setup" class="screen">
+    <div class="topbar">
+      <button class="back" onclick="go('home')">→</button>
+      <h2>تنظیمات بازی</h2>
+      <div style="width:44px"></div>
+    </div>
+
+    <div class="card">
+      <div class="field">
+        <label>👥 تعداد بازیکنان</label>
+        <div class="stepper">
+          <button onclick="adj('players',-1)">−</button>
+          <div class="val" id="v-players">5</div>
+          <button onclick="adj('players',1)">+</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>🕵️ تعداد جاسوس‌ها <span id="sp-hint" style="color:var(--accent);font-size:12px"></span></label>
+        <div class="stepper">
+          <button onclick="adj('spies',-1)">−</button>
+          <div class="val" id="v-spies">1</div>
+          <button onclick="adj('spies',1)">+</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>🪓 حالت تَبَر (تعداد شهروندان تَبَر)</label>
+        <div class="stepper">
+          <button onclick="adj('axes',-1)">−</button>
+          <div class="val" id="v-axes">0</div>
+          <button onclick="adj('axes',1)">+</button>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px">
+          شهروند تَبَر کلمه‌ی متفاوتی می‌بیند ولی نمی‌فهمه که فرق داره
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🎯 موضوع کلمه‌ی اصلی</h3>
+      <select id="topic-sel" onchange="renderTopicPreview()"></select>
+      <div id="topic-preview" style="margin-top:10px;font-size:13px;color:var(--muted)"></div>
+    </div>
+
+    <div class="card">
+      <h3>🪓 موضوع کلمه‌ی تَبَر</h3>
+      <div class="seg-ctrl" style="margin-bottom:12px">
+        <button id="axe-same" class="active" onclick="setAxeMode('same')">همون موضوع</button>
+        <button id="axe-random" onclick="setAxeMode('random')">تصادفی</button>
+      </div>
+      <div style="font-size:12px;color:var(--muted)">
+        کلمه‌ی تَبَر از همون موضوع انتخابی باشه یا از یه موضوع دیگه
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🎚️ سطح سختی</h3>
+      <div class="seg-ctrl" style="margin-bottom:12px">
+        <button id="diff-easy" class="active" onclick="setDifficulty('easy')">آسون</button>
+        <button id="diff-hard" onclick="setDifficulty('hard')">سخت 🔥</button>
+        <button id="diff-mix" onclick="setDifficulty('mix')">ترکیبی</button>
+      </div>
+      <div style="font-size:12px;color:var(--muted)">
+        کلمات سخت معمولاً چندبخشی یا ترکیبی هستن
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>⏱️ مدت زمان بحث</h3>
+      <div class="seg-ctrl" style="margin-bottom:12px">
+        <button id="tm-auto" class="active" onclick="setTimerMode('auto')">🤖 خودکار</button>
+        <button id="tm-manual" onclick="setTimerMode('manual')">✋ دستی</button>
+        <button id="tm-off" onclick="setTimerMode('off')">⏸️ غیرفعال</button>
+      </div>
+      <div id="manual-timer-box" style="display:none">
+        <label style="font-size:13px;color:var(--muted);display:block;margin-bottom:6px">دقیقه</label>
+        <div class="stepper">
+          <button onclick="adj('gameTimer',-1)">−</button>
+          <div class="val" id="v-gameTimer">5</div>
+          <button onclick="adj('gameTimer',1)">+</button>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px">
+          حالت خودکار: هر بازیکن حدود ۳۰ ثانیه
+        </div>
+      </div>
+    </div>
+
+    <button class="btn primary" onclick="startGame()">🎲 شروع بازی</button>
+  </div>
+
+  <!-- صفحه انتقال گوشی -->
+  <div id="screen-handoff" class="screen">
+    <div class="reveal-wrap">
+      <div class="player-num" id="handoff-num"></div>
+      <div class="spy-icon" style="width:140px;height:140px;font-size:70px">📱</div>
+      <h2 style="margin:20px 0;font-size:22px" id="handoff-title">گوشی رو بده به بازیکن بعدی</h2>
+      <p style="color:var(--muted);margin-bottom:30px" id="handoff-sub">مطمئن شو فقط اون صفحه رو می‌بینه</p>
+      <button class="big-btn next" onclick="showWord()">👁️ آماده‌ام، کلمه رو نشون بده</button>
+    </div>
+  </div>
+
+  <!-- صفحه نمایش کلمه -->
+  <div id="screen-word" class="screen">
+    <div class="reveal-wrap">
+      <div class="player-num" id="word-num"></div>
+      <div class="word-card hidden-word" id="word-card">
+        <div id="word-inner">
+          <div style="font-size:50px">🔒</div>
+          <div style="margin-top:10px;color:var(--muted)">برای دیدن کلمه دکمه رو بزن</div>
+        </div>
+      </div>
+
+      <div class="timer-ring" id="timer-ring" style="display:none">
+        <svg width="130" height="130">
+          <circle class="bg" cx="65" cy="65" r="58"/>
+          <circle class="fg" id="timer-fg" cx="65" cy="65" r="58"
+            stroke-dasharray="364.4" stroke-dashoffset="0"/>
+        </svg>
+        <div class="timer-text" id="timer-text">5</div>
+      </div>
+
+      <button class="big-btn show" id="btn-reveal" onclick="revealWord()">🔓 نمایش کلمه</button>
+      <button class="big-btn got" id="btn-got" onclick="gotIt()" style="display:none">✅ متوجه شدم</button>
+      <button class="big-btn hint" id="btn-hint" onclick="toggleHint()" style="display:none">💡 توضیح کلمه</button>
+      <div id="hint-box" style="display:none;margin-top:10px;padding:14px;background:var(--bg2);border-radius:14px;font-size:14px;color:#cfcfe0;line-height:1.8;border:1px solid rgba(255,215,0,.2)"></div>
+    </div>
+  </div>
+
+  <!-- صفحه بحث -->
+  <div id="screen-discuss" class="screen">
+    <div class="discussion-wrap">
+      <div class="spy-icon" style="background:linear-gradient(135deg,var(--gold),#ff6b35)">🔍</div>
+      <h2 style="margin:20px 0;font-size:24px">مرحله‌ی بحث</h2>
+      <p style="color:var(--muted);margin-bottom:10px">حالا وقتشه جاسوس رو پیدا کنید!</p>
+      <div class="big-timer" id="discuss-timer">05:00</div>
+      <button class="btn primary" onclick="endDiscussion()" style="max-width:300px">
+        🏁 پایان بازی و نمایش کلمه‌ها
+      </button>
+      <p style="color:var(--muted);font-size:12px;margin-top:20px">
+        یا صبر کن تا تایمر تموم بشه
+      </p>
+    </div>
+  </div>
+
+  <!-- صفحه نمایش نتیجه -->
+  <div id="screen-reveal" class="screen">
+    <div class="reveal-wrap">
+      <div class="spy-icon" style="background:linear-gradient(135deg,var(--gold),#ff6b35)">🎉</div>
+      <h2 style="margin:20px 0;font-size:24px">نتیجه‌ی بازی</h2>
+
+      <div class="reveal-card">
+        <h3>🎯 کلمه‌ی شهروندان</h3>
+        <div class="word civ" id="reveal-civ"></div>
+      </div>
+
+      <div class="reveal-card" id="reveal-axe-card" style="display:none">
+        <h3>🪓 کلمه‌ی شهروند تَبَر</h3>
+        <div class="word axe" id="reveal-axe"></div>
+      </div>
+
+      <div class="reveal-card">
+        <h3>👥 نقش بازیکن‌ها</h3>
+        <div class="player-list" id="reveal-players"></div>
+      </div>
+
+      <button class="btn primary" onclick="go('home')">🏠 بازگشت به منو</button>
+      <button class="btn ghost" onclick="restartSame()">🔄 بازی مجدد با همین تنظیمات</button>
+    </div>
+  </div>
+
+  <!-- مدیریت کلمات -->
+  <div id="screen-words" class="screen">
+    <div class="topbar">
+      <button class="back" onclick="go('home')">→</button>
+      <h2>مدیریت کلمات</h2>
+      <div style="width:44px"></div>
+    </div>
+
+    <div class="card">
+      <h3>➕ افزودن کلمه جدید</h3>
+      <div class="field">
+        <label>دسته‌بندی</label>
+        <select id="new-cat"></select>
+      </div>
+      <div class="field">
+        <label>کلمه</label>
+        <input type="text" id="new-main" placeholder="مثلاً: سیب یا ته‌دیگ ماست">
+      </div>
+      <div class="field">
+        <label>سطح سختی</label>
+        <div class="seg-ctrl">
+          <button id="new-diff-easy" class="active" onclick="setNewDiff('easy')">آسون</button>
+          <button id="new-diff-hard" onclick="setNewDiff('hard')">سخت 🔥</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>توضیح کوتاه</label>
+        <textarea id="new-hint" rows="2" placeholder="توضیحی که وقتی بازیکن دکمه‌ی توضیح رو زد ببینه"></textarea>
+      </div>
+      <button class="btn primary" onclick="addWord()">➕ افزودن</button>
+    </div>
+
+    <div class="card">
+      <h3>📋 کلمات موجود</h3>
+      <div class="cat-tabs" id="word-tabs"></div>
+      <div class="word-chips" id="word-list"></div>
+    </div>
+
+    <button class="btn ghost" onclick="resetUsedWords()">🔄 بازنشانی کلمات استفاده‌شده</button>
+  </div>
+
+  <!-- تنظیمات -->
+  <div id="screen-settings" class="screen">
+    <div class="topbar">
+      <button class="back" onclick="go('home')">→</button>
+      <h2>تنظیمات</h2>
+      <div style="width:44px"></div>
+    </div>
+
+    <div class="card">
+      <h3>⏱️ زمان نمایش کلمه برای هر بازیکن</h3>
+      <div class="field">
+        <label>ثانیه (0 = غیرفعال)</label>
+        <div class="stepper">
+          <button onclick="adj('timer',-1)">−</button>
+          <div class="val" id="v-timer">5</div>
+          <button onclick="adj('timer',1)">+</button>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px">
+          اگر 0 باشد، تایمر غیرفعال می‌شود و بازیکن هر وقت خواست دکمه «متوجه شدم» را می‌زند
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🗑️ بازنشانی</h3>
+      <button class="btn danger" onclick="resetWords()">پاک کردن کلمات اضافه‌شده</button>
+      <button class="btn danger" onclick="resetAll()">بازگشت به حالت کارخانه</button>
+    </div>
+  </div>
+
+  <!-- درباره -->
+  <div id="screen-about" class="screen">
+    <div class="topbar">
+      <button class="back" onclick="go('home')">→</button>
+      <h2>درباره‌ی بازی</h2>
+      <div style="width:44px"></div>
+    </div>
+
+    <div class="about-box">
+      <h2>🕵️ دستیار جاسوس</h2>
+      <p>
+        <b>روش بازی:</b> به هر بازیکن یک کلمه نمایش داده می‌شود. همه‌ی شهروندان کلمه‌ی یکسانی می‌بینند، اما جاسوس‌ها هیچ کلمه‌ای نمی‌بینند و باید با گوش دادن به حرف دیگران، کلمه را حدس بزنند.
+      </p>
+      <p>
+        <b>هدف شهروندان:</b> با پرسیدن سؤال‌های غیرمستقیم از یکدیگر، جاسوس را پیدا کنند، بدون اینکه جاسوس کلمه را بفهمد.
+      </p>
+      <p>
+        <b>هدف جاسوس:</b> خودش را شهروند جا بزند و کلمه را حدس بزند.
+      </p>
+      <p>
+        <b>🪓 حالت تَبَر:</b> شهروند تَبَر یک کلمه‌ی متفاوت (اما مرتبط) می‌بیند. او هم مثل شهروند عادی باید جاسوس را پیدا کند، اما ممکن است در توضیحاتش دیگران را گیج کند!
+      </p>
+    </div>
+
+    <div class="about-box">
+      <div style="font-size:14px;color:var(--muted)">ساخته‌ی</div>
+      <div class="creator">
+        <div>👨‍💻 طراح و توسعه‌دهنده</div>
+        <div class="name">کورش بخشنده</div>
+      </div>
+      <div style="margin-top:16px;font-size:12px;color:var(--muted)">نسخه ۳.۰ · ۱۴۰۵</div>
+    </div>
+
+    <button class="btn ghost" onclick="go('home')">🏠 بازگشت</button>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ ذرات پس‌زمینه ============ */
+(function(){
+  const box = document.getElementById('particles');
+  const N = 25;
+  for(let i=0;i<N;i++){
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random()*100 + '%';
+    p.style.animationDuration = (8 + Math.random()*12) + 's';
+    p.style.animationDelay = (Math.random()*10) + 's';
+    const colors = ['#ff2e63','#7b2cff','#00e5ff','#ffd700'];
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.boxShadow = `0 0 6px ${p.style.background}`;
+    box.appendChild(p);
+  }
+})();
+
+/* ============ داده‌ی کلمات ============ */
+const DEFAULT_WORDS = {
+  "حیوانات": [
+    {m:"شیر", a:"ببر", h:"سلطان جنگل، یال دارد و غرش می‌کند", d:"easy"},
+    {m:"فیل", a:"کرگدن", h:"بزرگ‌ترین حیوان خشکی با خرطوم بلند", d:"easy"},
+    {m:"زرافه", a:"شتر", h:"بلندقدترین حیوان با گردن بسیار بلند", d:"easy"},
+    {m:"پنگوئن", a:"عروس دریایی", h:"پرنده‌ای که پرواز نمی‌کند اما شنا می‌کند", d:"easy"},
+    {m:"عقاب", a:"شاهین", h:"پرنده‌ی شکاری با چشمان تیزبین", d:"easy"},
+    {m:"دلفین", a:"نهنگ", h:"پستاندار باهوش دریایی", d:"easy"},
+    {m:"مار", a:"تمساح", h:"حیوانی خزنده و بدون دست و پا", d:"easy"},
+    {m:"میمون", a:"گوریل", h:"نزدیک‌ترین حیوان به انسان", d:"easy"},
+    {m:"خرس", a:"پاندا", h:"حیوانی بزرگ و قوی که عسل دوست دارد", d:"easy"},
+    {m:"روباه", a:"گرگ", h:"حیوانی باهوش و مکار", d:"easy"},
+    {m:"طوطی", a:"قناری", h:"پرنده‌ای رنگارنگ که می‌تواند حرف بزند", d:"easy"},
+    {m:"لاک‌پشت", a:"حلزون", h:"حیوانی کند با خانه روی پشتش", d:"easy"},
+    {m:"اسب", a:"گورخر", h:"حیوانی که سوارش می‌شوند", d:"easy"},
+    {m:"گربه", a:"پلنگ", h:"حیوان خانگی با سبیل و چنگال", d:"easy"},
+    {m:"سگ", a:"گرگ", h:"بهترین دوست انسان", d:"easy"},
+    {m:"گاو", a:"گوزن", h:"حیوانی که شیر می‌دهد", d:"easy"},
+    {m:"گوسفند", a:"بز", h:"حیوانی با پشم که در گله زندگی می‌کند", d:"easy"},
+    {m:"خرگوش", a:"سنجاب", h:"حیوانی با گوش‌های بلند و جهنده", d:"easy"},
+    {m:"مورچه", a:"زنبور", h:"حشره‌ی کوچک اجتماعی", d:"easy"},
+    {m:"پروانه", a:"سنجاقک", h:"حشره‌ای رنگارنگ با بال", d:"easy"},
+    {m:"جغد", a:"خفاش", h:"پرنده‌ی شب‌گرد", d:"easy"},
+    {m:"شترمرغ", a:"پلیکان", h:"بزرگ‌ترین پرنده‌ی جهان", d:"easy"},
+    {m:"کوسه", a:"ماهی", h:"شکارچی خطرناک اقیانوس", d:"easy"},
+    {m:"هشت‌پا", a:"ستاره‌ی دریایی", h:"موجود دریایی با هشت بازو", d:"easy"},
+    {m:"قورباغه", a:"وزغ", h:"دوزیستی که قورقور می‌کند", d:"easy"},
+    {m:"خرس قطبی", a:"پلنگ دریایی", h:"حیوان سفید بزرگ در قطب", d:"hard"},
+    {m:"اسب آبی", a:"کرگدن", h:"حیوان بزرگ آفریقایی که در آب زندگی می‌کند", d:"hard"},
+    {m:"مار کبری", a:"مار پیتون", h:"مار سمی با کلاهک", d:"hard"},
+    {m:"شتر دوکوهانه", a:"شتر یک‌کوهانه", h:"شتر با دو کوهان", d:"hard"},
+    {m:"پلنگ صورتی", a:"یوزپلنگ", h:"گربه‌سان سریع با خال‌های صورتی", d:"hard"},
+  ],
+  "میوه‌ها": [
+    {m:"سیب", a:"گلابی", h:"میوه‌ای گرد و قرمز، نماد سلامتی", d:"easy"},
+    {m:"موز", a:"خیار", h:"میوه‌ی زرد و کشیده با پوست ضخیم", d:"easy"},
+    {m:"هندوانه", a:"خربزه", h:"میوه‌ی بزرگ تابستانی با پوست سبز", d:"easy"},
+    {m:"انار", a:"گیلاس", h:"میوه‌ای قرمز با دانه‌های ریز زیاد", d:"easy"},
+    {m:"پرتقال", a:"نارنگی", h:"مرکبات نارنجی رنگ و آبدار", d:"easy"},
+    {m:"توت‌فرنگی", a:"تمشک", h:"میوه‌ی کوچک قرمز با دانه روی پوست", d:"easy"},
+    {m:"انگور", a:"آلو", h:"میوه‌ای خوشه‌ای و کوچک", d:"easy"},
+    {m:"کیوی", a:"آووکادو", h:"میوه‌ای با پوست کرکی و مغز سبز", d:"easy"},
+    {m:"آناناس", a:"نارگیل", h:"میوه‌ی گرمسیری با تاج برگ", d:"easy"},
+    {m:"لیمو", a:"گریپ‌فروت", h:"مرکباتی ترش و زرد", d:"easy"},
+    {m:"هلو", a:"شلیل", h:"میوه‌ای نرم و آبدار با هسته", d:"easy"},
+    {m:"زردآلو", a:"آلوچه", h:"میوه‌ی کوچک نارنجی رنگ", d:"easy"},
+    {m:"خرما", a:"انجیر", h:"میوه‌ی شیرین گرمسیری", d:"easy"},
+    {m:"انبه", a:"پاپایا", h:"میوه‌ی گرمسیری با هسته‌ی بزرگ", d:"easy"},
+    {m:"انگور سیاه", a:"کشمش", h:"میوه‌ی خوشه‌ای تیره", d:"easy"},
+    {m:"طالبی", a:"گرمک", h:"میوه‌ی زرد و معطر", d:"easy"},
+    {m:"آلو", a:"گوجه", h:"میوه‌ای بنفش و آبدار", d:"easy"},
+    {m:"نارگیل", a:"بادام هندی", h:"میوه‌ی گرمسیری با پوست سخت", d:"easy"},
+    {m:"ازگیل", a:"زالزالک", h:"میوه‌ی پاییزی", d:"easy"},
+    {m:"به", a:"سیب ترش", h:"میوه‌ای معطر برای مربا", d:"easy"},
+    {m:"توت فرنگی وحشی", a:"تمشک کوهی", h:"میوه‌ی کوچک قرمز وحشی", d:"hard"},
+    {m:"انگور فرنگی", a:"آلوچه", h:"میوه‌ی کوچک سبز ترش", d:"hard"},
+    {m:"آلو بخارا", a:"آلو سیاه", h:"آلوی خشک شده", d:"hard"},
+    {m:"انار ترش", a:"انار شیرین", h:"انار با طعم ترش", d:"hard"},
+  ],
+  "سبزیجات": [
+    {m:"هویج", a:"شلغم", h:"سبزی نارنجی رنگ و ریشه‌ای", d:"easy"},
+    {m:"سیب‌زمینی", a:"بطاطا", h:"سبزی زیرزمینی پرطرفدار", d:"easy"},
+    {m:"پیاز", a:"سیر", h:"سبزی با بوی تند و لایه‌لایه", d:"easy"},
+    {m:"گوجه", a:"فلفل دلمه", h:"سبزی قرمز و آبدار", d:"easy"},
+    {m:"خیار", a:"کدو", h:"سبزی سبز و خنک", d:"easy"},
+    {m:"بادمجان", a:"کدو بنفش", h:"سبزی بنفش برای خورش", d:"easy"},
+    {m:"کاهو", a:"اسفناج", h:"سبزی برگ‌دار برای سالاد", d:"easy"},
+    {m:"کلم", a:"بروکلی", h:"سبزی گرد و برگ‌دار", d:"easy"},
+    {m:"قارچ", a:"دنباله‌دار", h:"خوراکی بدون برگ و ریشه", d:"easy"},
+    {m:"ذرت", a:"گندم", h:"دانه‌های زرد روی بلال", d:"easy"},
+    {m:"لوبیا", a:"نخود", h:"حبوبات برای خورش", d:"easy"},
+    {m:"عدس", a:"ماش", h:"حبوبات کوچک و مقوی", d:"easy"},
+    {m:"سبزی خوردن", a:"ریحان", h:"برگ‌های معطر کنار غذا", d:"easy"},
+    {m:"جعفری", a:"گشنیز", h:"سبزی معطر خرد شده", d:"easy"},
+    {m:"تره‌فرنگی", a:"پیازچه", h:"سبزی بلند و سبز", d:"easy"},
+    {m:"کلم بروکلی", a:"گل‌کلم", h:"سبزی سبز یا سفید با گل‌های ریز", d:"hard"},
+    {m:"فلفل دلمه‌ای", a:"فلفل تند", h:"فلفل بزرگ و گوشتی", d:"hard"},
+    {m:"کدو حلوایی", a:"کدو سبز", h:"کدوی نارنجی و شیرین", d:"hard"},
+  ],
+  "مشاغل": [
+    {m:"پزشک", a:"پرستار", h:"در بیمارستان کار می‌کند و روپوش سفید دارد", d:"easy"},
+    {m:"معلم", a:"استاد دانشگاه", h:"در مدرسه درس می‌دهد", d:"easy"},
+    {m:"پلیس", a:"کارآگاه", h:"یونیفرم می‌پوشد و قانون را اجرا می‌کند", d:"easy"},
+    {m:"آتش‌نشان", a:"نجات‌غریق", h:"با آتش مبارزه می‌کند", d:"easy"},
+    {m:"خلبان", a:"کمک‌خلبان", h:"هواپیما را هدایت می‌کند", d:"easy"},
+    {m:"آشپز", a:"قناد", h:"در رستوران غذا می‌پزد", d:"easy"},
+    {m:"مهندس", a:"معمار", h:"ساختمان و پل طراحی می‌کند", d:"easy"},
+    {m:"بازیگر", a:"کارگردان", h:"در فیلم و تئاتر نقش بازی می‌کند", d:"easy"},
+    {m:"ورزشکار", a:"مربی", h:"در مسابقات ورزشی شرکت می‌کند", d:"easy"},
+    {m:"کشاورز", a:"باغبان", h:"در مزرعه کار می‌کند", d:"easy"},
+    {m:"نجار", a:"آهنگر", h:"با چوب کار می‌کند", d:"easy"},
+    {m:"روزنامه‌نگار", a:"خبرنگار", h:"خبر می‌نویسد و گزارش می‌دهد", d:"easy"},
+    {m:"وکیل", a:"قاضی", h:"در دادگاه از حق موکل دفاع می‌کند", d:"easy"},
+    {m:"دندان‌پزشک", a:"چشم‌پزشک", h:"دندان‌ها را درمان می‌کند", d:"easy"},
+    {m:"داروساز", a:"دکتر", h:"در داروخانه دار می‌دهد", d:"easy"},
+    {m:"راننده", a:"تاکسیران", h:"ماشین را هدایت می‌کند", d:"easy"},
+    {m:"نقاش", a:"مجسمه‌ساز", h:"روی بوم رنگ می‌زند", d:"easy"},
+    {m:"خواننده", a:"آهنگساز", h:"آواز می‌خواند", d:"easy"},
+    {m:"نویسنده", a:"شاعر", h:"کتاب می‌نویسد", d:"easy"},
+    {m:"عکاس", a:"فیلمبردار", h:"با دوربین تصویر ثبت می‌کند", d:"easy"},
+    {m:"بانکدار", a:"حسابدار", h:"در بانک کار می‌کند", d:"easy"},
+    {m:"فروشنده", a:"صاحب مغازه", h:"در فروشگاه کالا می‌فروشد", d:"easy"},
+    {m:"آرایشگر", a:"زیباساز", h:"مو و صورت را مرتب می‌کند", d:"easy"},
+    {m:"خیاط", a:"طراح مد", h:"لباس می‌دوزد", d:"easy"},
+    {m:"مکانیک", a:"برقکار", h:"ماشین را تعمیر می‌کند", d:"easy"},
+    {m:"سرباز", a:"افسر", h:"در ارتش خدمت می‌کند", d:"easy"},
+    {m:"دریانورد", a:"ملوان", h:"روی کشتی کار می‌کند", d:"easy"},
+    {m:"فضانورد", a:"ستاره‌شناس", h:"به فضا سفر می‌کند", d:"easy"},
+    {m:"مهندس نرم‌افزار", a:"برنامه‌نویس", h:"کد می‌نویسد و نرم‌افزار می‌سازد", d:"hard"},
+    {m:"طراح گرافیک", a:"تصویرساز", h:"طرح‌های بصری می‌سازد", d:"hard"},
+  ],
+  "مکان‌ها": [
+    {m:"مدرسه", a:"دانشگاه", h:"جایی که بچه‌ها درس می‌خوانند", d:"easy"},
+    {m:"بیمارستان", a:"درمانگاه", h:"جایی برای درمان بیماران", d:"easy"},
+    {m:"فرودگاه", a:"ایستگاه قطار", h:"هواپیما اینجا بلند می‌شود", d:"easy"},
+    {m:"سینما", a:"تئاتر", h:"فیلم روی پرده بزرگ نمایش داده می‌شود", d:"easy"},
+    {m:"رستوران", a:"کافه", h:"غذا سفارش می‌دهی و می‌خوری", d:"easy"},
+    {m:"ساحل", a:"دریاچه", h:"کنار آب با ماسه یا سنگ", d:"easy"},
+    {m:"جنگل", a:"بیابان", h:"پر از درخت و حیوان", d:"easy"},
+    {m:"کوه", a:"قله", h:"بلندترین نقطه‌ی طبیعت", d:"easy"},
+    {m:"مسجد", a:"کلیسا", h:"محل عبادت", d:"easy"},
+    {m:"بانک", a:"صرافی", h:"پول نگه‌داری و جابه‌جا می‌شود", d:"easy"},
+    {m:"موزه", a:"گالری", h:"آثار قدیمی یا هنری نمایش داده می‌شود", d:"easy"},
+    {m:"شهربازی", a:"سیرک", h:"وسایل تفریحی هیجان‌انگیز", d:"easy"},
+    {m:"کتابخانه", a:"کتاب‌فروشی", h:"پر از کتاب برای خواندن", d:"easy"},
+    {m:"پارک", a:"باغ", h:"فضای سبز برای پیاده‌روی", d:"easy"},
+    {m:"استادیوم", a:"سالن ورزشی", h:"جای تماشاچیان مسابقه", d:"easy"},
+    {m:"هتل", a:"مهمانسرا", h:"جایی برای اقامت مسافران", d:"easy"},
+    {m:"داروخانه", a:"مطب", h:"دارو می‌خری", d:"easy"},
+    {m:"آرایشگاه", a:"سالن زیبایی", h:"مو و صورت را مرتب می‌کنند", d:"easy"},
+    {m:"نانوایی", a:"قنادی", h:"نان تازه می‌خری", d:"easy"},
+    {m:"سوپرمارکت", a:"مغازه", h:"خرید روزانه", d:"easy"},
+    {m:"ایستگاه اتوبوس", a:"ایستگاه مترو", h:"منتظر وسیله‌ی نقلیه", d:"easy"},
+    {m:"پمپ بنزین", a:"کارواش", h:"سوخت‌گیری ماشین", d:"easy"},
+    {m:"زندان", a:"پادگان", h:"محل نگهداری مجرمان", d:"easy"},
+    {m:"سفارت", a:"کنسولگری", h:"نمایندگی یک کشور در کشور دیگر", d:"easy"},
+    {m:"شهر", a:"روستا", h:"محل زندگی تعداد زیادی آدم", d:"easy"},
+    {m:"مرکز خرید", a:"بازار سنتی", h:"جایی برای خرید با مغازه‌های زیاد", d:"hard"},
+    {m:"پارک آبی", a:"استخر", h:"جایی برای تفریح آبی", d:"hard"},
+  ],
+  "غذاها": [
+    {m:"پیتزا", a:"لازانیا", h:"غذای ایتالیایی گرد با پنیر", d:"easy"},
+    {m:"برگر", a:"ساندویچ", h:"گوشت چرخ‌کرده بین دو نان", d:"easy"},
+    {m:"قورمه‌سبزی", a:"قیمه", h:"خورش ایرانی معروف با سبزی", d:"easy"},
+    {m:"کباب", a:"جوجه", h:"گوشت روی آتش", d:"easy"},
+    {m:"آش", a:"سوپ", h:"غذای آبکی با حبوبات", d:"easy"},
+    {m:"دلمه", a:"برگ مو", h:"برگ پیچیده شده با مواد داخلش", d:"easy"},
+    {m:"زرشک‌پلو", a:"باقالی‌پلو", h:"برنج ایرانی با مخلفات", d:"easy"},
+    {m:"بستنی", a:"فالوده", h:"دسر سرد و شیرین", d:"easy"},
+    {m:"کیک", a:"شیرینی", h:"دسر شیرین پخته‌شده در فر", d:"easy"},
+    {m:"چلو", a:"ته‌چین", h:"برنج ایرانی با ته‌دیگ", d:"easy"},
+    {m:"فسنجان", a:"آلواسفناج", h:"خورش ایرانی با گردو", d:"easy"},
+    {m:"کوفته", a:"کتلت", h:"گوشت چرخ‌کرده‌ی گرد", d:"easy"},
+    {m:"آبگوشت", a:"دیزی", h:"غذای سنتی ایرانی با نخود", d:"easy"},
+    {m:"باقالی‌پلو", a:"سبزی‌پلو", h:"برنج با باقالی یا سبزی", d:"easy"},
+    {m:"ماکارونی", a:"اسپاگتی", h:"رشته‌های ایتالیایی با سس", d:"easy"},
+    {m:"سوشی", a:"ساشیمی", h:"غذای ژاپنی با برنج و ماهی", d:"easy"},
+    {m:"همبرگر", a:"هات‌داگ", h:"فست‌فود غربی", d:"easy"},
+    {m:"سیب‌زمینی سرخ‌کرده", a:"پیاز سوخاری", h:"مخلفات کنار غذا", d:"easy"},
+    {m:"سالاد", a:"ماست", h:"پیش‌غذای سرد", d:"easy"},
+    {m:"تاکو", a:"بوریتو", h:"غذای مکزیکی", d:"easy"},
+    {m:"شله‌زرد", a:"فرنی", h:"دسر ایرانی زرد رنگ", d:"easy"},
+    {m:"باقلوا", a:"قطاب", h:"شیرینی سنتی با مغز", d:"easy"},
+    {m:"سوهان", a:"گز", h:"سوغاتی با آرد و مغز", d:"easy"},
+    {m:"ته‌دیگ ماست", a:"ته‌دیگ نان", h:"ته‌دیگ سفید و ترد", d:"hard"},
+    {m:"زرشک پلو با مرغ", a:"زرشک پلو با گوشت", h:"برنج زرشکی با مرغ", d:"hard"},
+    {m:"آب دوغ خیار", a:"ماست و خیار", h:"غذای سرد تابستانی", d:"hard"},
+    {m:"کباب بختیاری", a:"کباب کوبیده", h:"کباب مخلوط گوشت و جوجه", d:"hard"},
+    {m:"قیمه نثار", a:"قیمه", h:"برنج با خورش قیمه و مخلفات", d:"hard"},
+    {m:"دلمه برگ مو", a:"دلمه فلفل", h:"دلمه پیچیده در برگ مو", d:"hard"},
+    {m:"باقالی پلو با ماهیچه", a:"باقالی پلو با گوشت", h:"برنج باقالی با ماهیچه", d:"hard"},
+    {m:"چلو خورش فسنجان", a:"چلو خورش قورمه", h:"برنج با خورش فسنجان", d:"hard"},
+    {m:"پیتزا پپرونی", a:"پیتزا مارگاریتا", h:"پیتزا با سوسیس پپرونی", d:"hard"},
+    {m:"ساندویچ ژامبون", a:"ساندویچ مرغ", h:"ساندویچ با ژامبون", d:"hard"},
+    {m:"بستنی قیفی", a:"بستنی چوبی", h:"بستنی در قیف", d:"hard"},
+  ],
+  "وسایل": [
+    {m:"گوشی", a:"تبلت", h:"صفحه‌نمایش لمسی در جیب", d:"easy"},
+    {m:"لپ‌تاپ", a:"کامپیوتر", h:"برای کار و بازی", d:"easy"},
+    {m:"ساعت", a:"ساعت مچی", h:"زمان را نشان می‌دهد", d:"easy"},
+    {m:"چتر", a:"چتر آفتاب", h:"جلوی باران یا آفتاب را می‌گیرد", d:"easy"},
+    {m:"کلید", a:"قفل", h:"در را باز می‌کند", d:"easy"},
+    {m:"آینه", a:"عینک", h:"خودت را در آن می‌بینی", d:"easy"},
+    {m:"کتاب", a:"دفتر", h:"برای خواندن و نوشتن", d:"easy"},
+    {m:"دوچرخه", a:"اسکوتر", h:"وسیله‌ی نقلیه‌ی دو چرخ", d:"easy"},
+    {m:"ماشین", a:"موتور", h:"وسیله‌ی نقلیه‌ی چهار چرخ", d:"easy"},
+    {m:"یخچال", a:"فریزر", h:"غذا را سرد نگه می‌دارد", d:"easy"},
+    {m:"تلویزیون", a:"پروژکتور", h:"تصویر متحرک نمایش می‌دهد", d:"easy"},
+    {m:"قلم", a:"مداد", h:"برای نوشتن", d:"easy"},
+    {m:"کاغذ", a:"مقوا", h:"برای نوشتن و کشیدن", d:"easy"},
+    {m:"قیچی", a:"چاقو", h:"برای بریدن", d:"easy"},
+    {m:"چسب", a:"نوار چسب", h:"چیزها را به هم می‌چسباند", d:"easy"},
+    {m:"لامپ", a:"چراغ", h:"روشنایی می‌دهد", d:"easy"},
+    {m:"فرش", a:"قالی", h:"روی زمین پهن می‌شود", d:"easy"},
+    {m:"صندلی", a:"مبل", h:"برای نشستن", d:"easy"},
+    {m:"میز", a:"پیشخوان", h:"سطحی برای گذاشتن چیزها", d:"easy"},
+    {m:"تخت", a:"تشک", h:"برای خوابیدن", d:"easy"},
+    {m:"کمد", a:"کشو", h:"لباس را در آن می‌گذاری", d:"easy"},
+    {m:"کفش", a:"دمپایی", h:"به پا می‌کنی", d:"easy"},
+    {m:"کیف", a:"کوله‌پشتی", h:"چیزها را در آن می‌گذاری", d:"easy"},
+    {m:"دوربین", a:"دوربین فیلمبرداری", h:"تصویر ثبت می‌کند", d:"easy"},
+    {m:"رادیو", a:"ضبط صوت", h:"موسیقی پخش می‌کند", d:"easy"},
+    {m:"ماشین لباسشویی", a:"ظرفشویی", h:"لباس یا ظرف را می‌شوید", d:"hard"},
+    {m:"جارو برقی", a:"جارو", h:"برای تمیز کردن زمین", d:"hard"},
+    {m:"اتو بخار", a:"اتو", h:"لباس را صاف می‌کند", d:"hard"},
+  ],
+  "شخصیت‌ها": [
+    {m:"سوپرمن", a:"بتمن", h:"قهرمانی با شنل که پرواز می‌کند", d:"easy"},
+    {m:"هری پاتر", a:"دانشجوی جادو", h:"جادوگر با عینک و چوب‌دستی", d:"easy"},
+    {m:"شرک", a:"گرینچ", h:"موجود سبز رنگ افسانه‌ای", d:"easy"},
+    {m:"سیندرلا", a:"سفیدبرفی", h:"شاهزاده‌خانم با کفش شیشه‌ای", d:"easy"},
+    {m:"شرلوک", a:"پوارو", h:"کارآگاه معروف با ذره‌بین", d:"easy"},
+    {m:"جیمز باند", a:"مأمور مخفی", h:"جاسوس ۰۰۷", d:"easy"},
+    {m:"باب‌اسفنجی", a:"پاتریک", h:"شخصیت کارتونی زرد در دریا", d:"easy"},
+    {m:"میکی‌موس", a:"دانالد", h:"موش کارتونی معروف", d:"easy"},
+    {m:"اسپایدرمن", a:"مرد عنکبوتی", h:"با تار از ساختمان بالا می‌رود", d:"easy"},
+    {m:"ایرون‌من", a:"ثـور", h:"قهرمانی با زره پیشرفته", d:"easy"},
+    {m:"جوکر", a:"لک‌لک", h:"شخصیت شرور با آرایش صورت", d:"easy"},
+    {m:"تانتور", a:"هالک", h:"موجود بزرگ و قوی", d:"easy"},
+    {m:"یودا", a:"دارث ویدر", h:"شخصیت جنگ ستارگان", d:"easy"},
+    {m:"السا", a:"آنا", h:"شاهزاده‌ی یخی", d:"easy"},
+    {m:"شیرشاه", a:"سیمبا", h:"شیر جوان در آفریقا", d:"easy"},
+    {m:"علاالدین", a:"عمر", h:"پسر فقیر با چراغ جادو", d:"easy"},
+    {m:"مولان", a:"مریدا", h:"دختر جنگجو", d:"easy"},
+    {m:"کونگ‌فو پاندا", a:"پو", h:"پاندای رزمی‌کار", d:"easy"},
+    {m:"مرد مورچه‌ای", a:"دکتر استرنج", h:"قهرمان کوچک یا جادوگر", d:"easy"},
+    {m:"بلک ویدو", a:"کاپیتان آمریکا", h:"قهرمان زن یا با سپر", d:"easy"},
+    {m:"فلش", a:"سوپرمن", h:"قهرمان سریع یا پرنده", d:"easy"},
+  ],
+  "طبیعت": [
+    {m:"خورشید", a:"ماه", h:"ستاره‌ی روز", d:"easy"},
+    {m:"دریا", a:"اقیانوس", h:"آب بسیار زیاد و شور", d:"easy"},
+    {m:"رودخانه", a:"جویبار", h:"آب جاری در طبیعت", d:"easy"},
+    {m:"ابر", a:"مه", h:"در آسمان سفید و پنبه‌ای", d:"easy"},
+    {m:"برف", a:"یخ", h:"سفید و سرد در زمستان", d:"easy"},
+    {m:"رنگین‌کمان", a:"آفتاب", h:"هفت رنگ در آسمان بعد از باران", d:"easy"},
+    {m:"ستاره", a:"سیاره", h:"در شب می‌درخشد", d:"easy"},
+    {m:"آتشفشان", a:"زلزله", h:"کوهی که مواد مذاب بیرون می‌دهد", d:"easy"},
+    {m:"گل", a:"درخت", h:"زیبا و معطر در باغ", d:"easy"},
+    {m:"باد", a:"طوفان", h:"هوا با سرعت حرکت می‌کند", d:"easy"},
+    {m:"جنگل", a:"بیشه", h:"پر از درخت", d:"easy"},
+    {m:"صحرا", a:"تپه‌های شنی", h:"خشک و بی‌آب", d:"easy"},
+    {m:"آبشار", a:"چشمه", h:"آب از بلندی می‌ریزد", d:"easy"},
+    {m:"غار", a:"شکاف", h:"حفره‌ای در کوه", d:"easy"},
+    {m:"دره", a:"تنگه", h:"پستی بین کوه‌ها", d:"easy"},
+    {m:"جزیره", a:"صخره", h:"خشکی محصور در آب", d:"easy"},
+    {m:"شبنم", a:"مه", h:"قطرات آب روی برگ", d:"easy"},
+    {m:"تگرگ", a:"باران", h:"یخ از آسمان می‌بارد", d:"easy"},
+    {m:"رعد", a:"برق", h:"صدای بلند در آسمان", d:"easy"},
+    {m:"سحابی", a:"کهکشان", h:"ابر کیهانی", d:"easy"},
+  ],
+  "ورزش": [
+    {m:"فوتبال", a:"والیبال", h:"با توپ و دروازه", d:"easy"},
+    {m:"بسکتبال", a:"هندبال", h:"توپ را در سبد می‌اندازند", d:"easy"},
+    {m:"شنا", a:"شیرجه", h:"در آب انجام می‌شود", d:"easy"},
+    {m:"کشتی", a:"جودو", h:"ورزش رزمی و تن‌به‌تن", d:"easy"},
+    {m:"تنیس", a:"اسکواش", h:"با راکت و توپ کوچک", d:"easy"},
+    {m:"دوومیدانی", a:"ماراتن", h:"دویدن در مسیر", d:"easy"},
+    {m:"بوکس", a:"کیک‌بوکسینگ", h:"با مشت و دستکش", d:"easy"},
+    {m:"اسکی", a:"اسنوبرد", h:"روی برف", d:"easy"},
+    {m:"دوچرخه‌سواری", a:"دوچرخه‌ی کوهستان", h:"با دوچرخه", d:"easy"},
+    {m:"کاراته", a:"تکواندو", h:"هنر رزمی با کمربند", d:"easy"},
+    {m:"گلف", a:"پات", h:"با چوب و توپ کوچک", d:"easy"},
+    {m:"بیلیارد", a:"اسنوکر", h:"با چوب و توپ روی میز", d:"easy"},
+    {m:"پینگ‌پنگ", a:"بدمینتون", h:"با راکت و توپ کوچک", d:"easy"},
+    {m:"کشتی کج", a:"مبارزه", h:"ورزش نمایشی", d:"easy"},
+    {m:"ژیمناستیک", a:"یوگا", h:"حرکات نرم و انعطاف", d:"easy"},
+    {m:"تیراندازی", a:"کمان", h:"با تفنگ یا کمان", d:"easy"},
+    {m:"سوارکاری", a:"شترسواری", h:"روی اسب یا شتر", d:"easy"},
+    {m:"قایقرانی", a:"کانو", h:"روی آب با پارو", d:"easy"},
+    {m:"اسکیت", a:"رولربلید", h:"با چرخ روی زمین", d:"easy"},
+    {m:"چوگان", a:"لاکراس", h:"ورزش با چوب و توپ", d:"easy"},
+  ],
+  "کشورها": [
+    {m:"ایران", a:"عراق", h:"کشوری در خاورمیانه با تاریخ کهن", d:"easy"},
+    {m:"فرانسه", a:"ایتالیا", h:"کشوری اروپایی با برج معروف", d:"easy"},
+    {m:"ژاپن", a:"چین", h:"کشوری آسیایی با فرهنگ سامورایی", d:"easy"},
+    {m:"مصر", a:"یونان", h:"سرزمین اهرام", d:"easy"},
+    {m:"برزیل", a:"آرژانتین", h:"سرزمین کارناوال و فوتبال", d:"easy"},
+    {m:"کانادا", a:"آمریکا", h:"کشوری بزرگ در شمال", d:"easy"},
+    {m:"استرالیا", a:"نیوزیلند", h:"قاره‌ای با کانگورو", d:"easy"},
+    {m:"هند", a:"پاکستان", h:"کشوری پرجمعیت در آسیا", d:"easy"},
+    {m:"روسیه", a:"اوکراین", h:"بزرگ‌ترین کشور جهان", d:"easy"},
+    {m:"اسپانیا", a:"پرتغال", h:"سرزمین گاوبازی", d:"easy"},
+    {m:"ترکیه", a:"سوریه", h:"کشوری در همسایگی ایران", d:"easy"},
+    {m:"آلمان", a:"اتریش", h:"کشوری اروپایی صنعتی", d:"easy"},
+    {m:"انگلیس", a:"اسکاتلند", h:"جزیره‌ای در اروپا", d:"easy"},
+    {m:"کره‌جنوبی", a:"کره‌شمالی", h:"کشوری با کی‌پاپ", d:"easy"},
+    {m:"مکزیک", a:"کلمبیا", h:"کشوری آمریکای لاتین", d:"easy"},
+    {m:"آفریقای‌جنوبی", a:"کنیا", h:"کشوری در جنوب آفریقا", d:"easy"},
+    {m:"سوئد", a:"نروژ", h:"کشوری اسکاندیناوی", d:"easy"},
+    {m:"هلند", a:"بلژیک", h:"سرزمین لاله و پنیر", d:"easy"},
+    {m:"تایلند", a:"ویتنام", h:"کشوری جنوب شرق آسیا", d:"easy"},
+    {m:"اندونزی", a:"مالزی", h:"کشوری جزیره‌ای", d:"easy"},
+  ],
+  "ابزارها": [
+    {m:"چکش", a:"پتک", h:"برای کوبیدن میخ", d:"easy"},
+    {m:"پیچ‌گوشتی", a:"آچار", h:"برای باز و بسته کردن پیچ", d:"easy"},
+    {m:"انبر", a:"دمباریک", h:"برای گرفتن و کشیدن", d:"easy"},
+    {m:"اره", a:"فرز", h:"برای بریدن چوب یا فلز", d:"easy"},
+    {m:"مته", a:"دریل", h:"برای سوراخ کردن", d:"easy"},
+    {m:"متر", a:"خط‌کش", h:"برای اندازه‌گیری", d:"easy"},
+    {m:"تراز", a:"گونیا", h:"برای تراز کردن", d:"easy"},
+    {m:"نردبان", a:"چهارپایه", h:"برای بالا رفتن", d:"easy"},
+    {m:"بیل", a:"کلنگ", h:"برای کندن زمین", d:"easy"},
+    {m:"فرغون", a:"چرخ‌دستی", h:"برای حمل بار", d:"easy"},
+    {m:"سیم‌چین", a:"کف‌چین", h:"برای بریدن سیم", d:"easy"},
+    {m:"آچار فرانسه", a:"آچار ستاره‌ای", h:"برای پیچ‌های مختلف", d:"easy"},
+    {m:"رنده", a:"سوهان", h:"برای صاف کردن سطح", d:"easy"},
+    {m:"منگنه", a:"پانچ", h:"برای سوراخ یا اتصال کاغذ", d:"easy"},
+    {m:"چسب حرارتی", a:"چسب نواری", h:"برای چسباندن", d:"easy"},
+  ],
+  "لباس‌ها": [
+    {m:"پیراهن", a:"بلوز", h:"لباس بالاتنه", d:"easy"},
+    {m:"شلوار", a:"دامن", h:"لباس پایین‌تنه", d:"easy"},
+    {m:"کفش", a:"چکمه", h:"به پا می‌کنی", d:"easy"},
+    {m:"کاپشن", a:"پالتو", h:"لباس گرم زمستانی", d:"easy"},
+    {m:"کلاه", a:"کلاه‌گیس", h:"روی سر می‌گذاری", d:"easy"},
+    {m:"دستکش", a:"شال‌گردن", h:"برای گرم کردن دست", d:"easy"},
+    {m:"جوراب", a:"جوراب‌شلواری", h:"به پا می‌کنی", d:"easy"},
+    {m:"کت", a:"کت‌وشلوار", h:"لباس رسمی", d:"easy"},
+    {m:"لباس زیر", a:"زیرپوش", h:"لباس زیرین", d:"easy"},
+    {m:"شنا", a:"مایو", h:"برای شنا", d:"easy"},
+    {m:"روپوش", a:"گاون", h:"لباس کار", d:"easy"},
+    {m:"یونیفرم", a:"لباس فرم", h:"لباس مخصوص مدرسه یا کار", d:"easy"},
+    {m:"کراوات", a:"پاپیون", h:"برای دور گردن", d:"easy"},
+    {m:"کمربند", a:"ساسبند", h:"برای نگه‌داشتن شلوار", d:"easy"},
+    {m:"عینک آفتابی", a:"کلاه آفتابی", h:"برای محافظت از چشم", d:"easy"},
+    {m:"ساعت مچی", a:"دستبند", h:"روی مچ دست", d:"easy"},
+    {m:"گوشواره", a:"گردنبند", h:"زیورآلات", d:"easy"},
+    {m:"انگشتر", a:"سنگ انگشتر", h:"روی انگشت", d:"easy"},
+  ],
+  "وسایل نقلیه": [
+    {m:"ماشین", a:"کامیون", h:"وسیله‌ی نقلیه‌ی چهار چرخ", d:"easy"},
+    {m:"موتور", a:"اسکوتر", h:"دو چرخ با موتور", d:"easy"},
+    {m:"دوچرخه", a:"سه‌چرخه", h:"با پدال حرکت می‌کند", d:"easy"},
+    {m:"اتوبوس", a:"مینی‌بوس", h:"حمل مسافر زیاد", d:"easy"},
+    {m:"قطار", a:"مترو", h:"روی ریل حرکت می‌کند", d:"easy"},
+    {m:"هواپیما", a:"هلیکوپتر", h:"در آسمان پرواز می‌کند", d:"easy"},
+    {m:"کشتی", a:"قایق", h:"روی آب حرکت می‌کند", d:"easy"},
+    {m:"تاکسی", a:"اسنپ", h:"حمل مسافر در شهر", d:"easy"},
+    {m:"آمبولانس", a:"آتش‌نشانی", h:"خودروی اضطراری", d:"easy"},
+    {m:"پیکاپ", a:"وانت", h:"خودروی باری کوچک", d:"easy"},
+    {m:"تراکتور", a:"لیفتراک", h:"خودروی کشاورزی یا انبار", d:"easy"},
+    {m:"تانک", a:"جیپ", h:"خودروی نظامی", d:"easy"},
+    {m:"قایق بادبانی", a:"قایق موتوری", h:"روی آب با باد یا موتور", d:"easy"},
+    {m:"زیردریایی", a:"ناو", h:"در زیر یا روی آب", d:"easy"},
+    {m:"جت", a:"گلایدر", h:"هواپیمای سریع یا بدون موتور", d:"easy"},
+  ],
+  "گیاهان": [
+    {m:"گل رز", a:"گل یاس", h:"گل خوشبو با خار", d:"easy"},
+    {m:"درخت بلوط", a:"درخت چنار", h:"درخت بلند با برگ‌های پهن", d:"easy"},
+    {m:"کاکتوس", a:"ساکولنت", h:"گیاه گوشتی بدون آب زیاد", d:"easy"},
+    {m:"نخل", a:"درخت نارگیل", h:"درخت گرمسیری بلند", d:"easy"},
+    {m:"بامبو", a:"نی", h:"گیاه بلند و توخالی", d:"easy"},
+    {m:"گل آفتابگردان", a:"گل لاله", h:"گل زرد یا رنگی", d:"easy"},
+    {m:"درخت کاج", a:"درخت سرو", h:"درخت همیشه‌سبز", d:"easy"},
+    {m:"علف", a:"چمن", h:"پوشش سبز زمین", d:"easy"},
+    {m:"خزه", a:"گلسنگ", h:"پوشش سبز روی سنگ", d:"easy"},
+    {m:"درخت سیب", a:"درخت گلابی", h:"درخت میوه", d:"easy"},
+    {m:"گل نرگس", a:"گل مریم", h:"گل معطر بهاری", d:"easy"},
+    {m:"گل داوودی", a:"گل اطلسی", h:"گل رنگارنگ", d:"easy"},
+    {m:"درخت بید", a:"درخت اکالیپتوس", h:"درخت با شاخه‌های آویزان", d:"easy"},
+    {m:"گل ارکیده", a:"گل بنفشه", h:"گل زیبا و ظریف", d:"easy"},
+    {m:"درخت گردو", a:"درخت بادام", h:"درخت با مغز خوراکی", d:"easy"},
+  ],
+  "احساسات": [
+    {m:"خوشحالی", a:"شادی", h:"حس خوب و مثبت", d:"easy"},
+    {m:"غم", a:"اندوه", h:"حس ناراحتی عمیق", d:"easy"},
+    {m:"خشم", a:"عصبانیت", h:"حس شدید ناراحتی", d:"easy"},
+    {m:"ترس", a:"وحشت", h:"حس خطر", d:"easy"},
+    {m:"عشق", a:"علاقه", h:"حس محبت عمیق", d:"easy"},
+    {m:"تعجب", a:"شگفتی", h:"حس غیرمنتظره", d:"easy"},
+    {m:"امید", a:"آرزو", h:"انتظار چیز خوب", d:"easy"},
+    {m:"ناامیدی", a:"مایوسی", h:"از دست دادن امید", d:"easy"},
+    {m:"حسادت", a:"رشک", h:"حس نسبت به دیگری", d:"easy"},
+    {m:"غرور", a:"افتخار", h:"حس بزرگی خود", d:"easy"},
+    {m:"شرم", a:"خجالت", h:"حس بد از کار خود", d:"easy"},
+    {m:"تنهایی", a:"انزوا", h:"حس بی‌کسی", d:"easy"},
+    {m:"آرامش", a:"صلح", h:"حس آرام بودن", d:"easy"},
+    {m:"هیجان", a:"شور", h:"حس پرانرژی", d:"easy"},
+    {m:"دلتنگی", a:"غربت", h:"حس دوری از کسی", d:"easy"},
+  ],
+  "رنگ‌ها": [
+    {m:"قرمز", a:"زرشکی", h:"رنگ خون و آتش", d:"easy"},
+    {m:"آبی", a:"فیروزه‌ای", h:"رنگ آسمان و دریا", d:"easy"},
+    {m:"سبز", a:"یشمی", h:"رنگ طبیعت و برگ", d:"easy"},
+    {m:"زرد", a:"طلایی", h:"رنگ خورشید", d:"easy"},
+    {m:"سیاه", a:"ذغالی", h:"رنگ تاریکی", d:"easy"},
+    {m:"سفید", a:"شیری", h:"رنگ برف و شیر", d:"easy"},
+    {m:"بنفش", a:"یاسی", h:"رنگ گل بنفشه", d:"easy"},
+    {m:"نارنجی", a:"هلویی", h:"رنگ پرتقال", d:"easy"},
+    {m:"صورتی", a:"سرخابی", h:"رنگ گل رز", d:"easy"},
+    {m:"قهوه‌ای", a:"شکلاتی", h:"رنگ خاک و چوب", d:"easy"},
+    {m:"خاکستری", a:"نقره‌ای", h:"رنگ ابر", d:"easy"},
+    {m:"لاجوردی", a:"نیلی", h:"رنگ آبی تیره", d:"easy"},
+    {m:"زیتونی", a:"یشمی تیره", h:"رنگ سبز تیره", d:"easy"},
+    {m:"کرم", a:"بژ", h:"رنگ روشن ملایم", d:"easy"},
+    {m:"مسی", a:"برنزی", h:"رنگ فلز", d:"easy"},
+  ],
+  "ساختمان‌ها": [
+    {m:"برج", a:"آسمان‌خراش", h:"ساختمان بلند", d:"easy"},
+    {m:"خانه", a:"آپارتمان", h:"محل زندگی", d:"easy"},
+    {m:"قلعه", a:"بارو", h:"ساختمان نظامی قدیمی", d:"easy"},
+    {m:"مسجد", a:"حسینیه", h:"محل عبادت", d:"easy"},
+    {m:"کلیسا", a:"کنیسه", h:"محل عبادت مسیحیان یا یهودیان", d:"easy"},
+    {m:"مدرسه", a:"دبیرستان", h:"محل تحصیل", d:"easy"},
+    {m:"دانشگاه", a:"حوزه", h:"محل آموزش عالی", d:"easy"},
+    {m:"بیمارستان", a:"درمانگاه", h:"محل درمان", d:"easy"},
+    {m:"کتابخانه", a:"آرشیو", h:"محل نگهداری کتاب", d:"easy"},
+    {m:"موزه", a:"نمایشگاه", h:"محل نمایش آثار", d:"easy"},
+    {m:"سینما", a:"تئاتر", h:"محل نمایش فیلم یا نمایش", d:"easy"},
+    {m:"استادیوم", a:"سالن", h:"محل مسابقه", d:"easy"},
+    {m:"فرودگاه", a:"ترمینال", h:"محل پرواز", d:"easy"},
+    {m:"ایستگاه قطار", a:"پایانه", h:"محل حرکت قطار", d:"easy"},
+    {m:"بانک", a:"صرافی", h:"محل امور مالی", d:"easy"},
+  ],
+  "اسباب‌بازی‌ها": [
+    {m:"عروسک", a:"خرس عروسکی", h:"اسباب‌بازی نرم", d:"easy"},
+    {m:"ماشین اسباب‌بازی", a:"قطار اسباب‌بازی", h:"وسیله‌ی نقلیه‌ی کوچک", d:"easy"},
+    {m:"لگو", a:"پازل", h:"اسباب‌بازی ساختنی", d:"easy"},
+    {m:"توپ", a:"بادکنک", h:"اسباب‌بازی گرد", d:"easy"},
+    {m:"دوچرخه", a:"اسکوتر", h:"اسباب‌بازی حرکتی", d:"easy"},
+    {m:"عروسک باربی", a:"عروسک اکشن", h:"عروسک انسان‌نما", d:"easy"},
+    {m:"تفنگ اسباب‌بازی", a:"شمشیر اسباب‌بازی", h:"اسباب‌بازی جنگی", d:"easy"},
+    {m:"بازی فکری", a:"پازل", h:"بازی با فکر", d:"easy"},
+    {m:"خمیر بازی", a:"شن جادویی", h:"اسباب‌بازی شکل‌پذیر", d:"easy"},
+    {m:"بادبادک", a:"فرفره", h:"اسباب‌بازی پرنده", d:"easy"},
+    {m:"یویو", a:"اسپینر", h:"اسباب‌بازی چرخشی", d:"easy"},
+    {m:"روبیک", a:"پازل چوبی", h:"اسباب‌بازی حل‌کردنی", d:"easy"},
+  ],
+  "فیلم‌ها": [
+    {m:"تایتانیک", a:"پسران", h:"فیلم معروف غرق کشتی", d:"easy"},
+    {m:"ماتریکس", a:"آواتار", h:"فیلم علمی-تخیلی", d:"easy"},
+    {m:"فروزن", a:"یخ‌زده", h:"انیمیشن یخی", d:"easy"},
+    {m:"شیرشاه", a:"موآنا", h:"انیمیشن حیوانی", d:"easy"},
+    {m:"هری پاتر", a:"ارباب حلقه‌ها", h:"فیلم جادویی", d:"easy"},
+    {m:"جوکر", a:"بتمن", h:"فیلم ابرقهرمانی", d:"easy"},
+    {m:"انتقام‌جویان", a:"مرد عنکبوتی", h:"فیلم مارول", d:"easy"},
+    {m:"جنگ ستارگان", a:"پیشتازان فضا", h:"فیلم فضایی", d:"easy"},
+    {m:"پدرخوانده", a:"رفقای خوب", h:"فیلم مافیایی", d:"easy"},
+    {m:"فارست گامپ", a:"زندگی زیباست", h:"فیلم درام", d:"easy"},
+    {m:"اینترستلار", a:"گرانش", h:"فیلم فضایی پیچیده", d:"easy"},
+    {m:"شهر اشباح", a:"همسایه‌ی من توتورو", h:"انیمیشن میازاکی", d:"easy"},
+    {m:"شک", a:"تلقین", h:"فیلم نولان", d:"easy"},
+    {m:"گلادیاتور", a:"شجاع‌دل", h:"فیلم تاریخی", d:"easy"},
+  ],
+  "موسیقی": [
+    {m:"گیتار", a:"ویولن", h:"ساز زهی", d:"easy"},
+    {m:"پیانو", a:"ارگ", h:"ساز کلاویه‌ای", d:"easy"},
+    {m:"درام", a:"طبل", h:"ساز کوبه‌ای", d:"easy"},
+    {m:"ترومپت", a:"ساکسوفون", h:"ساز بادی برنجی", d:"easy"},
+    {m:"فلوت", a:"کلارینت", h:"ساز بادی چوبی", d:"easy"},
+    {m:"تار", a:"سه‌تار", h:"ساز ایرانی", d:"easy"},
+    {m:"سنتور", a:"کمانچه", h:"ساز سنتی ایرانی", d:"easy"},
+    {m:"عود", a:"بربط", h:"ساز شرقی", d:"easy"},
+    {m:"دف", a:"تنبور", h:"ساز کوبه‌ای یا زهی", d:"easy"},
+    {m:"هارپ", a:"چنگ", h:"ساز بزرگ زهی", d:"easy"},
+    {m:"میکروفون", a:"هدفون", h:"برای صدا", d:"easy"},
+    {m:"بلندگو", a:"آمپلی‌فایر", h:"برای پخش صدا", d:"easy"},
+    {m:"رکورد", a:"استودیو", h:"محل ضبط صدا", d:"easy"},
+    {m:"کنسرت", a:"اجرا", h:"اجرای زنده‌ی موسیقی", d:"easy"},
+  ],
+  "کلمات سفارشی": []
+};
+
+/* ============ وضعیت ============ */
+let state = {
+  players:5, spies:1, axes:0, timer:5,
+  gameTimerMode:'auto',
+  gameTimer:5,
+  topic:"", axeMode:'same', difficulty:'easy',
+  words:[], queue:[], current:0,
+  civWord:"", axeWord:"", hint:"",
+  gameStartTime:0, gameDuration:0, gameInterval:null,
+  playerRoles: [], // {role, word}
+  newWordDiff: 'easy',
+};
+let timerInterval = null;
+let autoTimer = null;
+
+/* ============ ذخیره‌سازی ============ */
+function loadWords(){
+  const saved = localStorage.getItem('spy_custom');
+  const custom = saved ? JSON.parse(saved) : {};
+  const merged = JSON.parse(JSON.stringify(DEFAULT_WORDS));
+  for(const cat in custom){
+    if(!merged[cat]) merged[cat]=[];
+    merged[cat] = merged[cat].concat(custom[cat].map(w=>({...w, custom:true})));
+  }
+  return merged;
+}
+function saveCustom(words){
+  const custom = {};
+  for(const cat in words){
+    const c = words[cat].filter(w=>w.custom);
+    if(c.length) custom[cat]=c;
+  }
+  localStorage.setItem('spy_custom', JSON.stringify(custom));
+}
+function loadSettings(){
+  const s = JSON.parse(localStorage.getItem('spy_settings')||'{}');
+  state.timer = s.timer ?? 5;
+  state.gameTimerMode = s.gameTimerMode ?? 'auto';
+  state.gameTimer = s.gameTimer ?? 5;
+  state.axeMode = s.axeMode ?? 'same';
+  state.difficulty = s.difficulty ?? 'easy';
+}
+function saveSettings(){
+  localStorage.setItem('spy_settings', JSON.stringify({
+    timer:state.timer,
+    gameTimerMode:state.gameTimerMode,
+    gameTimer:state.gameTimer,
+    axeMode:state.axeMode,
+    difficulty:state.difficulty
+  }));
+}
+function loadUsed(){
+  return JSON.parse(localStorage.getItem('spy_used')||'{}');
+}
+function saveUsed(u){
+  localStorage.setItem('spy_used', JSON.stringify(u));
+}
+
+let allWords = loadWords();
+loadSettings();
+
+/* ============ ناوبری ============ */
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  window.scrollTo(0,0);
+  if(id==='setup') initSetup();
+  if(id==='words') initWords();
+  if(id==='settings') initSettings();
+  if(id==='home') updateHomeStats();
+}
+
+function updateHomeStats(){
+  let total = 0, cats = 0;
+  for(const c in allWords){
+    if(allWords[c].length){
+      total += allWords[c].length;
+      cats++;
+    }
+  }
+  const used = loadUsed();
+  let usedCount = 0;
+  for(const c in used) usedCount += used[c].length;
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-used').textContent = usedCount;
+  document.getElementById('stat-cats').textContent = cats;
+}
+
+/* ============ تنظیمات بازی ============ */
+function initSetup(){
+  document.getElementById('v-players').textContent = state.players;
+  document.getElementById('v-spies').textContent = state.spies;
+  document.getElementById('v-axes').textContent = state.axes;
+  document.getElementById('v-gameTimer').textContent = state.gameTimer;
+  updateSpiesHint();
+  setTimerMode(state.gameTimerMode);
+  setAxeMode(state.axeMode);
+  setDifficulty(state.difficulty);
+  
+  const sel = document.getElementById('topic-sel');
+  sel.innerHTML = '';
+  const topics = Object.keys(allWords).filter(c=>allWords[c].length>0);
+  const allOpt = document.createElement('option');
+  allOpt.value = '__all__';
+  let totalAll = 0;
+  topics.forEach(t=>totalAll += allWords[t].length);
+  allOpt.textContent = `🎲 همه موضوعات (${totalAll} کلمه)`;
+  sel.appendChild(allOpt);
+  topics.forEach(t=>{
+    const o = document.createElement('option');
+    o.value=t; o.textContent=`${t} (${allWords[t].length})`;
+    sel.appendChild(o);
+  });
+  if(state.topic && state.topic!=='__all__' && topics.includes(state.topic)){
+    sel.value = state.topic;
+  } else {
+    state.topic = '__all__';
+    sel.value = '__all__';
+  }
+  renderTopicPreview();
+}
+function renderTopicPreview(){
+  state.topic = document.getElementById('topic-sel').value;
+  let words = getFilteredWords();
+  const used = loadUsed();
+  let usedCount = 0;
+  words.forEach(w=>{
+    const cat = findCat(w.m);
+    if(used[cat] && used[cat].includes(w.m)) usedCount++;
+  });
+  const available = words.length - usedCount;
+  const preview = words.slice(0,6).map(w=>w.m).join('، ');
+  document.getElementById('topic-preview').innerHTML =
+    words.length ?
+    `نمونه: ${preview}${words.length>6?' و ...':''}<br>
+    <span style="color:var(--gold)">${available} کلمه در دسترس</span> از ${words.length} (تکراری استفاده نمی‌شود)`
+    : 'هیچ کلمه‌ای نیست';
+}
+function getFilteredWords(){
+  let words = [];
+  if(state.topic==='__all__'){
+    for(const c in allWords) words = words.concat(allWords[c].map(w=>({...w, _cat:c})));
+  } else {
+    words = (allWords[state.topic]||[]).map(w=>({...w, _cat:state.topic}));
+  }
+  // فیلتر بر اساس سطح سختی
+  if(state.difficulty === 'easy'){
+    words = words.filter(w => w.d === 'easy');
+  } else if(state.difficulty === 'hard'){
+    words = words.filter(w => w.d === 'hard');
+  }
+  // mix: همه کلمات
+  return words;
+}
+function findCat(wordName){
+  for(const c in allWords){
+    if(allWords[c].some(w=>w.m===wordName)) return c;
+  }
+  return null;
+}
+function adj(field, d){
+  if(field==='players'){
+    state.players = Math.max(3, Math.min(30, state.players+d));
+    document.getElementById('v-players').textContent = state.players;
+    if(state.spies > state.players-2) state.spies = Math.max(1, state.players-2);
+    if(state.axes > state.players - state.spies -1) state.axes = Math.max(0, state.players - state.spies -1);
+    document.getElementById('v-spies').textContent = state.spies;
+    document.getElementById('v-axes').textContent = state.axes;
+    updateSpiesHint();
+  } else if(field==='spies'){
+    state.spies = Math.max(1, Math.min(state.players-2, state.spies+d));
+    document.getElementById('v-spies').textContent = state.spies;
+    if(state.axes > state.players - state.spies -1) {
+      state.axes = Math.max(0, state.players - state.spies -1);
+      document.getElementById('v-axes').textContent = state.axes;
+    }
+    updateSpiesHint();
+  } else if(field==='axes'){
+    state.axes = Math.max(0, Math.min(state.players - state.spies -1, state.axes+d));
+    document.getElementById('v-axes').textContent = state.axes;
+  } else if(field==='timer'){
+    state.timer = Math.max(0, Math.min(60, state.timer+d));
+    document.getElementById('v-timer').textContent = state.timer;
+    saveSettings();
+  } else if(field==='gameTimer'){
+    state.gameTimer = Math.max(1, Math.min(60, state.gameTimer+d));
+    document.getElementById('v-gameTimer').textContent = state.gameTimer;
+    saveSettings();
+  }
+}
+function suggestSpies(n){
+  if(n<=5) return 1;
+  if(n<=8) return 1;
+  if(n<=11) return 2;
+  return 2;
+}
+function updateSpiesHint(){
+  const s = suggestSpies(state.players);
+  document.getElementById('sp-hint').textContent =
+    state.spies===s ? '' : `(پیشنهاد: ${s})`;
+}
+function setTimerMode(mode){
+  state.gameTimerMode = mode;
+  document.querySelectorAll('#screen-setup .seg-ctrl button[id^="tm-"]').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tm-'+mode).classList.add('active');
+  document.getElementById('manual-timer-box').style.display = mode==='manual' ? 'block' : 'none';
+  saveSettings();
+}
+function setAxeMode(mode){
+  state.axeMode = mode;
+  document.querySelectorAll('#screen-setup .seg-ctrl button[id^="axe-"]').forEach(b=>b.classList.remove('active'));
+  document.getElementById('axe-'+mode).classList.add('active');
+  saveSettings();
+}
+function setDifficulty(diff){
+  state.difficulty = diff;
+  document.querySelectorAll('#screen-setup .seg-ctrl button[id^="diff-"]').forEach(b=>b.classList.remove('active'));
+  document.getElementById('diff-'+diff).classList.add('active');
+  saveSettings();
+  renderTopicPreview();
+}
+
+/* ============ شروع بازی ============ */
+function startGame(){
+  let words = getFilteredWords();
+  if(words.length===0){ toast('کلمه‌ای با این سطح سختی نیست'); return; }
+
+  const used = loadUsed();
+  let available = words.filter(w=>!used[w._cat] || !used[w._cat].includes(w.m));
+  if(available.length===0){
+    if(confirm('همه‌ی کلمات این موضوع استفاده شده‌اند. می‌خواهی بازنشانی شوند؟')){
+      resetUsedWords();
+      available = words;
+    } else {
+      return;
+    }
+  }
+  const pick = available[Math.floor(Math.random()*available.length)];
+  state.civWord = pick.m;
+  state.hint = pick.h || '';
+
+  // انتخاب کلمه‌ی تبر
+  state.axeWord = pickAxeWord(pick);
+
+  // ثبت به عنوان استفاده‌شده
+  if(!used[pick._cat]) used[pick._cat] = [];
+  used[pick._cat].push(pick.m);
+  saveUsed(used);
+
+  // ساخت صف
+  const roles = [];
+  for(let i=0;i<state.spies;i++) roles.push('spy');
+  for(let i=0;i<state.axes;i++) roles.push('axe');
+  while(roles.length < state.players) roles.push('civ');
+  for(let i=roles.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [roles[i],roles[j]] = [roles[j],roles[i]];
+  }
+  state.queue = roles;
+  state.current = 0;
+  state.playerRoles = roles.map(r => ({
+    role: r,
+    word: r === 'axe' ? state.axeWord : (r === 'spy' ? null : state.civWord)
+  }));
+
+  showHandoff();
+}
+
+function pickAxeWord(mainWord){
+  let pool = [];
+  if(state.axeMode === 'same'){
+    // از همون موضوع
+    const cat = mainWord._cat;
+    pool = allWords[cat].filter(w => w.m !== mainWord.m);
+  } else {
+    // از همه موضوعات
+    for(const c in allWords){
+      allWords[c].forEach(w => {
+        if(w.m !== mainWord.m) pool.push({...w, _cat:c});
+      });
+    }
+  }
+  if(pool.length === 0) return mainWord.m;
+  // فیلتر بر اساس سطح سختی
+  if(state.difficulty === 'easy'){
+    const easyPool = pool.filter(w => w.d === 'easy');
+    if(easyPool.length > 0) pool = easyPool;
+  } else if(state.difficulty === 'hard'){
+    const hardPool = pool.filter(w => w.d === 'hard');
+    if(hardPool.length > 0) pool = hardPool;
+  }
+  const pick = pool[Math.floor(Math.random()*pool.length)];
+  return pick.a || pick.m;
+}
+
+function showHandoff(){
+  const i = state.current;
+  document.getElementById('handoff-num').textContent = `بازیکن ${i+1} از ${state.queue.length}`;
+  document.getElementById('handoff-title').textContent =
+    i===0 ? 'گوشی رو بده به بازیکن اول' : 'گوشی رو بده به بازیکن بعدی';
+  document.getElementById('handoff-sub').textContent =
+    'مطمئن شو فقط اون صفحه رو می‌بینه';
+  go('handoff');
+}
+
+function showWord(){
+  const i = state.current;
+  const role = state.queue[i];
+  document.getElementById('word-num').textContent = `بازیکن ${i+1} از ${state.queue.length}`;
+
+  const card = document.getElementById('word-card');
+  card.className = 'word-card hidden-word';
+  document.getElementById('word-inner').innerHTML = `
+    <div style="font-size:50px">🔒</div>
+    <div style="margin-top:10px;color:var(--muted)">برای دیدن کلمه دکمه رو بزن</div>
+  `;
+
+  document.getElementById('btn-reveal').style.display = 'block';
+  document.getElementById('btn-got').style.display = 'none';
+  document.getElementById('btn-hint').style.display = 'none';
+  document.getElementById('hint-box').style.display = 'none';
+  document.getElementById('timer-ring').style.display = 'none';
+
+  state._pendingRole = role;
+  go('word');
+}
+
+function revealWord(){
+  const role = state._pendingRole;
+  const card = document.getElementById('word-card');
+  card.classList.remove('hidden-word');
+  let html = '';
+  if(role==='spy'){
+    card.style.background = 'linear-gradient(135deg, #3a0a1a, #1a0a2e)';
+    html = `
+      <div class="word-role">🕵️ نقش تو</div>
+      <div class="spy-label">جاسوس</div>
+      <div class="word-hint">تو کلمه را نمی‌دانی! با دقت به حرف دیگران گوش کن و خودت را شهروند جا بزن.</div>
+    `;
+  } else if(role==='axe'){
+    // شهروند تبر همون ظاهر شهروند عادی رو می‌بینه
+    card.style.background = 'linear-gradient(135deg, #1a1a35, #2a1a45)';
+    html = `
+      <div class="word-role">👤 شهروند</div>
+      <div class="word-text">${state.axeWord}</div>
+      <div class="word-hint">کلمه‌ی تو همینه. جاسوس رو پیدا کن!</div>
+    `;
+  } else {
+    card.style.background = 'linear-gradient(135deg, #1a1a35, #2a1a45)';
+    html = `
+      <div class="word-role">👤 شهروند</div>
+      <div class="word-text">${state.civWord}</div>
+      <div class="word-hint">کلمه‌ی تو همینه. جاسوس رو پیدا کن!</div>
+    `;
+  }
+  document.getElementById('word-inner').innerHTML = html;
+
+  document.getElementById('btn-reveal').style.display = 'none';
+  document.getElementById('btn-got').style.display = 'block';
+  if(role!=='spy' && state.hint){
+    document.getElementById('btn-hint').style.display = 'block';
+    document.getElementById('hint-box').textContent = state.hint;
+  } else {
+    document.getElementById('btn-hint').style.display = 'none';
+  }
+
+  // شروع تایمر نمایش کلمه
+  if(state.timer > 0){
+    startTimer();
+  } else {
+    document.getElementById('timer-ring').style.display = 'none';
+  }
+}
+
+function startTimer(){
+  clearInterval(autoTimer);
+  let t = state.timer;
+  const ring = document.getElementById('timer-ring');
+  const fg = document.getElementById('timer-fg');
+  const txt = document.getElementById('timer-text');
+  const C = 364.4;
+  ring.style.display = 'block';
+  fg.style.transition = 'none';
+  fg.style.strokeDashoffset = 0;
+  txt.textContent = t;
+  void fg.offsetWidth;
+  fg.style.transition = 'stroke-dashoffset 1s linear';
+
+  autoTimer = setInterval(()=>{
+    t--;
+    txt.textContent = t;
+    fg.style.strokeDashoffset = C * (1 - t/state.timer);
+    if(t<=0){
+      clearInterval(autoTimer);
+      gotIt(true);
+    }
+  }, 1000);
+}
+
+function toggleHint(){
+  const box = document.getElementById('hint-box');
+  const btn = document.getElementById('btn-hint');
+  if(box.style.display === 'none'){
+    box.style.display = 'block';
+    btn.classList.add('active');
+    // استوپ تایمر
+    clearInterval(autoTimer);
+    document.getElementById('timer-ring').style.display = 'none';
+  } else {
+    box.style.display = 'none';
+    btn.classList.remove('active');
+  }
+}
+
+function gotIt(auto=false){
+  clearInterval(autoTimer);
+  state.current++;
+  if(state.current >= state.queue.length){
+    startDiscussion();
+  } else {
+    showHandoff();
+  }
+}
+
+function startDiscussion(){
+  go('discuss');
+  if(state.gameTimerMode === 'off'){
+    document.getElementById('discuss-timer').textContent = '∞';
+    document.getElementById('discuss-timer').className = 'big-timer';
+    return;
+  }
+  let minutes = state.gameTimer;
+  if(state.gameTimerMode === 'auto'){
+    minutes = Math.max(2, Math.ceil((state.players * 0.5) + 1));
+  }
+  state.gameDuration = minutes * 60;
+  state.gameStartTime = Date.now();
+  renderDiscussTimer();
+  state.gameInterval = setInterval(()=>{
+    const elapsed = Math.floor((Date.now() - state.gameStartTime)/1000);
+    const remaining = state.gameDuration - elapsed;
+    if(remaining <= 0){
+      clearInterval(state.gameInterval);
+      renderDiscussTimer(0);
+      toast('⏰ زمان تمام شد!');
+      if(navigator.vibrate) navigator.vibrate([200,100,200,100,200]);
+      setTimeout(()=>endDiscussion(), 1500);
+    } else {
+      renderDiscussTimer(remaining);
+    }
+  }, 500);
+}
+
+function renderDiscussTimer(remaining){
+  if(remaining === undefined){
+    remaining = state.gameDuration - Math.floor((Date.now() - state.gameStartTime)/1000);
+  }
+  if(state.gameTimerMode === 'off'){
+    document.getElementById('discuss-timer').textContent = '∞';
+    document.getElementById('discuss-timer').className = 'big-timer';
+    return;
+  }
+  const m = Math.floor(remaining/60);
+  const s = remaining%60;
+  const timeStr = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+  const el = document.getElementById('discuss-timer');
+  el.textContent = timeStr;
+  let cls = 'big-timer';
+  if(remaining <= 30) cls += ' danger';
+  else if(remaining <= 60) cls += ' warning';
+  el.className = cls;
+}
+
+function endDiscussion(){
+  clearInterval(state.gameInterval);
+  showReveal();
+}
+
+function showReveal(){
+  document.getElementById('reveal-civ').textContent = state.civWord;
+  if(state.axes > 0){
+    document.getElementById('reveal-axe-card').style.display = 'block';
+    document.getElementById('reveal-axe').textContent = state.axeWord;
+  } else {
+    document.getElementById('reveal-axe-card').style.display = 'none';
+  }
+  
+  const list = document.getElementById('reveal-players');
+  list.innerHTML = '';
+  state.playerRoles.forEach((p, i) => {
+    const item = document.createElement('div');
+    item.className = 'player-item';
+    const roleName = p.role === 'spy' ? 'جاسوس' : (p.role === 'axe' ? 'تبر' : 'شهروند');
+    item.innerHTML = `
+      <span class="name">بازیکن ${i+1}</span>
+      <span class="role ${p.role}">${roleName}</span>
+    `;
+    list.appendChild(item);
+  });
+  
+  go('reveal');
+}
+
+function restartSame(){
+  startGame();
+}
+
+/* ============ مدیریت کلمات ============ */
+let currentCat = null;
+function initWords(){
+  const tabs = document.getElementById('word-tabs');
+  tabs.innerHTML = '';
+  const cats = Object.keys(allWords);
+  cats.forEach(c=>{
+    const t = document.createElement('div');
+    t.className = 'cat-tab';
+    t.textContent = `${c} (${allWords[c].length})`;
+    t.onclick = ()=>{ currentCat=c; renderWordList();
+      tabs.querySelectorAll('.cat-tab').forEach(x=>x.classList.remove('active'));
+      t.classList.add('active');
+    };
+    tabs.appendChild(t);
+  });
+  const sel = document.getElementById('new-cat');
+  sel.innerHTML = '';
+  cats.forEach(c=>{
+    const o = document.createElement('option');
+    o.value=c; o.textContent=c;
+    sel.appendChild(o);
+  });
+  const newOpt = document.createElement('option');
+  newOpt.value='__new__'; newOpt.textContent='+ دسته‌ی جدید';
+  sel.appendChild(newOpt);
+  sel.onchange = ()=>{
+    if(sel.value==='__new__'){
+      const name = prompt('نام دسته‌ی جدید:');
+      if(name && name.trim()){
+        const n = name.trim();
+        if(!allWords[n]) allWords[n]=[];
+        saveCustom(allWords);
+        initWords();
+      }
+      sel.value = cats[0];
+    }
+  };
+
+  currentCat = cats[0];
+  tabs.firstChild && tabs.firstChild.classList.add('active');
+  renderWordList();
+  setNewDiff(state.newWordDiff);
+}
+function renderWordList(){
+  const list = document.getElementById('word-list');
+  list.innerHTML = '';
+  const words = allWords[currentCat] || [];
+  const used = loadUsed();
+  const usedList = used[currentCat] || [];
+  if(words.length===0){
+    list.innerHTML = '<div style="color:var(--muted);font-size:13px">هنوز کلمه‌ای نیست</div>';
+    return;
+  }
+  words.forEach((w,idx)=>{
+    const c = document.createElement('div');
+    const isUsed = usedList.includes(w.m);
+    const isHard = w.d === 'hard';
+    c.className = 'chip' + (w.custom?' custom':'') + (isUsed?' used':'') + (isHard?' hard':'');
+    c.innerHTML = `<span>${w.m}</span>` + (w.custom?`<span class="x" onclick="delWord(${idx})">✕</span>`:'');
+    list.appendChild(c);
+  });
+}
+function setNewDiff(diff){
+  state.newWordDiff = diff;
+  document.querySelectorAll('#screen-words .seg-ctrl button[id^="new-diff-"]').forEach(b=>b.classList.remove('active'));
+  document.getElementById('new-diff-'+diff).classList.add('active');
+}
+function addWord(){
+  const cat = document.getElementById('new-cat').value;
+  const m = document.getElementById('new-main').value.trim();
+  const h = document.getElementById('new-hint').value.trim();
+  if(!m){ toast('کلمه رو وارد کن'); return; }
+  if(!allWords[cat]) allWords[cat]=[];
+  allWords[cat].push({m, a:null, h:h||null, d:state.newWordDiff, custom:true});
+  saveCustom(allWords);
+  document.getElementById('new-main').value='';
+  document.getElementById('new-hint').value='';
+  toast('✓ اضافه شد');
+  initWords();
+}
+function delWord(idx){
+  if(!confirm('حذف این کلمه؟')) return;
+  allWords[currentCat].splice(idx,1);
+  saveCustom(allWords);
+  renderWordList();
+}
+function resetUsedWords(){
+  if(!confirm('همه‌ی کلمات دوباره در دسترس قرار می‌گیرند. ادامه؟')) return;
+  localStorage.removeItem('spy_used');
+  toast('✓ بازنشانی شد');
+  if(document.getElementById('screen-words').classList.contains('active')){
+    renderWordList();
+  }
+}
+
+/* ============ تنظیمات ============ */
+function initSettings(){
+  document.getElementById('v-timer').textContent = state.timer;
+}
+function resetWords(){
+  if(!confirm('همه‌ی کلمات اضافه‌شده پاک شوند؟')) return;
+  localStorage.removeItem('spy_custom');
+  allWords = loadWords();
+  toast('✓ پاک شد');
+}
+function resetAll(){
+  if(!confirm('همه‌چیز به حالت اول برگرده؟')) return;
+  localStorage.clear();
+  location.reload();
+}
+
+/* ============ Toast ============ */
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2500);
+}
+
+/* شروع */
+updateHomeStats();
+</script>
+</body>
+</html>
